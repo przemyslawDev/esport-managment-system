@@ -11,10 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
+
+Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
