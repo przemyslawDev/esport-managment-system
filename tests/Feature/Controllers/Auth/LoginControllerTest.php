@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers\Auth;
 
 use Tests\TestCase;
 use App\User;
+use Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginControllerTest extends TestCase
@@ -23,14 +24,33 @@ class LoginControllerTest extends TestCase
     {
         $user = factory(User::class)->create([
             'email' => 'test@example.com',
-            'password' => bcrypt('test')
+            'password' => bcrypt('test123')
         ]);
 
         $data = [
-            'email' => 'test@exapmle.com',
-            'password' => 'test'
+            'email' => 'test@example.com',
+            'password' => 'test123'
         ];
 
-        $response = $this->post('/login', $data)->assertStatus(302);
+        $response = $this->post('/login', $data)
+            ->assertStatus(302);
+  
+        $this->assertEquals(Auth::id(), $user->id);
+    }
+
+    /** @test */
+    public function logout_response_success_test()
+    {
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user);
+
+        $this->assertTrue(Auth::check());
+
+        $response = $this->get('/logout')
+            ->assertStatus(302)
+            ->assertRedirect('/');
+
+        $this->assertFalse(Auth::check());
     }
 }

@@ -3,6 +3,7 @@
 /public/img
 /public/js
 /public/css
+/public/sb-admin
 /public/storage
 /storage/*.key
 /vendor
