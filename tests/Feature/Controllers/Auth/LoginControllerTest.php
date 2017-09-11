@@ -24,7 +24,8 @@ class LoginControllerTest extends TestCase
     {
         $user = factory(User::class)->create([
             'email' => 'test@example.com',
-            'password' => bcrypt('test123')
+            'password' => bcrypt('test123'),
+            'active' => 1
         ]);
 
         $data = [
@@ -36,6 +37,26 @@ class LoginControllerTest extends TestCase
             ->assertStatus(302);
   
         $this->assertEquals(Auth::id(), $user->id);
+    }
+
+    /** @test */
+    public function login_response_unactive_error_test()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('test123'),
+            'active' => 0
+        ]);
+
+        $data = [
+            'email' => 'test@example.com',
+            'password' => 'test123'
+        ];
+
+        $response = $this->post('/login', $data)
+            ->assertStatus(302);
+
+        $this->assertFalse(Auth::check());
     }
 
     /** @test */
