@@ -13,44 +13,31 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="sb-admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="sb-admin/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="sb-admin/dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
-    <link href="sb-admin/vendor/morrisjs/morris.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="sb-admin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    @if(Auth::check())
+        @include('layouts.nav')
     <div id="app">
-        @yield('content')
+        <div class="container-fluid">
+            <div class="row">
+                 <div class="col-sm-3 col-lg-2">
+                    @include('layouts.side-nav')
+                 </div>
+                 <div class="col-sm-9 col-lg-10">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
     </div>
+    @else
+         <div id="app">
+             @yield('content')
+         </div>
+    @endif
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <!-- jQuery -->
-    <script src="sb-admin/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="sb-admin/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="sb-admin/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="sb-admin/vendor/raphael/raphael.min.js"></script>
-    <script src="sb-admin/vendor/morrisjs/morris.min.js"></script>
-    <script src="sb-admin/data/morris-data.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="sb-admin/dist/js/sb-admin-2.js"></script>
 </body>
 </html>
