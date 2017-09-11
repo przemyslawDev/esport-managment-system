@@ -48,6 +48,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof DontHavePermissionException)
+        {   
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'You don\'t have permissions.'], 403);
+            }
+            return redirect()->route('403');
+        }
         return parent::render($request, $exception);
     }
 }
