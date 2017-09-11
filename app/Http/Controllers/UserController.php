@@ -22,6 +22,11 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    public function create()
+    {
+        return view('users.create');
+    }
+
     public function show($id)
     {
         return view('users.show')->with('id', $id);
@@ -32,11 +37,6 @@ class UserController extends Controller
         $user = User::where('id', $id)->with('roles')->first();
 
         return response()->json($user);
-    }
-
-    public function create()
-    {
-        return view('users.create');
     }
 
     public function store(StoreUserRequest $request)

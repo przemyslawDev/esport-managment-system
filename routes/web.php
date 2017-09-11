@@ -23,16 +23,16 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-   
+    
     Route::prefix('users')->middleware('role:system_admin')->group(function () {
         Route::get('/', 'UserController@index')->name('users.index');
-        Route::get('/{id}', 'UserController@show')->name('users.show');
         Route::get('/create', 'UserController@create')->name('users.create');
+        Route::get('/{id}', 'UserController@show')->name('users.show');
         Route::post('/', 'UserController@store')->name('users.store');
         Route::get('/{id}/edit', 'UserController@edit')->name('users.edit');
         Route::put('/{id}', 'UserController@update')->name('users.update');
         Route::delete('/{id}', 'UserController@destroy')->name('users.delete');
-    
+        
         Route::get('/activate/{id}', 'UserController@activate')->name('users.activate');
 
         Route::get('/user/{id}', 'UserController@get')->name('users.get');
