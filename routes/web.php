@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/403', function () {
+    return view('403');
+})->name('403');
+
 Auth::routes();
 
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
@@ -20,7 +24,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
    
-    Route::prefix('users')->group(function () {
+    Route::prefix('users')->middleware('role:system_admin')->group(function () {
         Route::get('/', 'UserController@index')->name('users.index');
         Route::get('/create', 'UserController@create')->name('users.create');
         Route::post('/', 'UserController@store')->name('users.store');
