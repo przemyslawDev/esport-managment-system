@@ -13,23 +13,34 @@ class UserControllerTest extends TestCase
     /** @test */
     public function index_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $response = $this->get('/users')
             ->assertStatus(200);
     }
 
     /** @test */
+    public function index_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+
+        $response = $this->get('/users')
+            ->assertRedirect('/403');
+    }
+
+    /** @test */
     public function index_as_guest_response_permission_error_test()
     {
+        $this->createUser();
+
         $response = $this->get('/users')
-            ->assertStatus(302);
+            ->assertRedirect('/403');
     }
 
     /** @test */
     public function show_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $user = factory(User::class)->create();
     
@@ -38,34 +49,58 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function show_as_guest_response_permission_error_test()
+    public function show_as_admin_response_permission_error_test()
     {
+        $this->createAdmin();
+
         $user = factory(User::class)->create();
 
         $response = $this->get('/users' . '/' . $user->id)
-            ->assertStatus(302);
+            ->assertRedirect('/403');
+    }
+
+    /** @test */
+    public function show_as_guest_response_permission_error_test()
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->get('/users' . '/' . $user->id)
+            ->assertRedirect('/403');
     }
 
     /** @test */
     public function create_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $response = $this->get('users/create')
             ->assertStatus(200);
     }
 
     /** @test */
+    public function create_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+
+        $response = $this->get('users/create')
+            ->assertRedirect(403);
+    }
+
+    /** @test */
     public function create_as_guest_response_permission_error_test()
     {
+        $this->createUser();
+
         $response = $this->get('users/create')
-            ->assertStatus(302);
+            ->assertRedirect(403);
     }
 
     /** @test */
     public function store_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $data = [
             'email' => 'test@example.com',
@@ -81,21 +116,37 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function store_as_guest_response_permissions_error_test()
+    public function store_as_admin_response_permissions_error_test()
     {
+        $this->createAdmin();
+
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123'
         ];
 
         $response = $this->json('post', '/users', $data)
-            ->assertStatus(401);
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function store_as_guest_response_permissions_error_test()
+    {
+        $this->createUser();
+
+        $data = [
+            'email' => 'test@example.com',
+            'password' => 'test123'
+        ];
+
+        $response = $this->json('post', '/users', $data)
+            ->assertStatus(403);
     }
 
     /** @test */
     public function store_response_validation_fail_test() 
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $data = collect([
             'email' => 'test@example.com',
@@ -125,7 +176,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function edit_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
         
         $user = factory(User::class)->create();
 
@@ -134,18 +185,31 @@ class UserControllerTest extends TestCase
     }
     
     /** @test */
-    public function edit_as_guest_response_permissions_error_test()
+    public function edit_as_admin_response_permissions_error_test()
     {
+        $this->createAdmin();
+
         $user = factory(User::class)->create();
 
         $response = $this->get('/users' . '/' . $user->id . '/edit')
-            ->assertStatus(302);
+            ->assertRedirect('/403');
+    }
+
+    /** @test */
+    public function edit_as_guest_response_permissions_error_test()
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->get('/users' . '/' . $user->id . '/edit')
+            ->assertRedirect('/403');
     }
 
     /** @test */
     public function update_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $user = factory(User::class)->create();
 
@@ -165,8 +229,10 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function update_as_guest_response_permission_error_test()
+    public function update_as_admin_response_permission_error_test()
     {
+        $this->createAdmin();
+
         $user = factory(User::class)->create();
 
         $data = [
@@ -175,13 +241,29 @@ class UserControllerTest extends TestCase
         ];
 
         $response = $this->json('put', '/users' . '/' . $user->id, $data)
-            ->assertStatus(401);
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function update_as_guest_response_permission_error_test()
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $data = [
+            'email' => 'test@example.com',
+            'avatar' => $user->avatar
+        ];
+
+        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+            ->assertStatus(403);
     }
 
     /** @test */
     public function update_response_validation_fail_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $user = factory(User::class)->create();
 
@@ -202,7 +284,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function delete_response_success_test()
     {
-        $this->createUser();
+        $this->createSystemAdmin();
 
         $user = factory(User::class)->create();
 
@@ -216,11 +298,24 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function delete_as_guest_response_permission_error_test()
+    public function delete_as_admin_response_permission_error_test()
     {
+        $this->createAdmin();
+
         $user = factory(User::class)->create();
 
         $response = $this->json('delete', '/users' . '/' . $user->id)
-            ->assertStatus(401);
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function delete_as_guest_response_permission_error_test()
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('delete', '/users' . '/' . $user->id)
+            ->assertStatus(403);
     }
 }

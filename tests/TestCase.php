@@ -26,10 +26,26 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
-    protected function createSystemAdmin()
+    protected function createAdmin() 
     {
         $user = factory(User::class)->create([
             'email' => 'admintest@example.com',
+            'password' => bcrypt('test')
+        ]);
+
+        $role = Role::where('name', 'admin')->first();
+        
+        $user->attachRole($role);
+
+        $this->actingAs($user);
+
+        return $this;
+    }
+
+    protected function createSystemAdmin()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'systemadmintest@example.com',
             'password' => bcrypt('test')
         ]);
 
