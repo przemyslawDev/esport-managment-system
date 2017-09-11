@@ -15,8 +15,7 @@ npm-debug.log
 yarn-error.log
 .env
 
-
-.vscode/*
+/.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
