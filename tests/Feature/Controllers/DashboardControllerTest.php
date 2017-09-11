@@ -13,12 +13,7 @@ class DashboardControllerTest extends TestCase
     /** @test */
     public function dashboard_response_success_test()
     {
-        $user = factory(User::class)->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('test')
-        ]);
-
-        $this->actingAs($user);
+        $this->createUser();
 
         $response = $this->get('/dashboard');
         

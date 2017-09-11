@@ -17,8 +17,8 @@ class AddAdminAndGuestUsers extends Migration
     {
         DB::table('users')->truncate();
 
-        $guest_role = Role::find(1);
-        $system_admin_role = Role::find(2);
+        $guest_role = Role::where('name', 'guest')->first();
+        $system_admin_role = Role::where('name', 'system_admin')->first();
 
         $user = new User();
 
