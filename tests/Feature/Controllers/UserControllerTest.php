@@ -214,7 +214,8 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $data = [
-            'email' => 'test@example.com'
+            'email' => 'test@example.com',
+            'roles' => [1,2]
         ];
 
         $response = $this->json('put', '/users' . '/' . $user->id, $data)
@@ -225,6 +226,16 @@ class UserControllerTest extends TestCase
             'email' => 'test@example.com',
             'avatar' => $user->avatar,
             'active' => 0
+        ]);
+
+        $this->assertDatabaseHas('role_user', [
+            'user_id' => $user->id,
+            'role_id' => 1
+        ]);
+
+        $this->assertDatabaseHas('role_user', [
+            'user_id' => $user->id,
+            'role_id' => 2
         ]);
     }
 
@@ -316,6 +327,45 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('delete', '/users' . '/' . $user->id)
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function activate_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $user = factory(User::class)->create(['active' => false]);
+
+        $response = $this->json('get', '/users/activate' . '/' . $user->id)
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'email' => $user->email,
+            'active' => true
+        ]);
+    }
+
+    /** @test */
+    public function activate_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('get', '/users/activate' . '/' . $user->id)
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function activate_as_guest_response_permission_error_test()
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('get', '/users/activate' . '/' . $user->id)
             ->assertStatus(403);
     }
 }

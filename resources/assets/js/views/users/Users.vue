@@ -11,6 +11,7 @@
                     <thead>
                         <tr>
                             <th>Email</th>
+                            <th>Roles</tH>
                             <th>Active</th>
                             <th>Actions</th>
                         </tr>
@@ -18,11 +19,20 @@
                     <tbody>
                         <tr v-for="user in users">
                             <td>{{ user.email }}</td>
+                            <td>
+                                <span style="margin-right: 10px;" v-for="role in user.roles">
+                                    {{ role.display_name }} 
+                                </span>
+                            </td>
                             <td>{{ user.active }}</td>
                             <td>
                                 <div class="">
                                     <a :href="'users/' + user.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
                                     <a v-on:click="deleteUser(user.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
+                                    <a v-on:click="activateUser(user.id)" type="button" class="btn btn-primary btn-sm">
+                                        {{ (user.active ? 'Deactivate' : 'Activate') }}
+                                    </a>
+                                    <a :href="'users/' + user.id" type="button" class="btn btn-info btn-sm">View</a>
                                 </div>
                             </td>
                         </tr>
@@ -68,7 +78,25 @@ export default {
             axios.delete('/users/' + id)
                 .then(function(response) {
                     th.getData();
-                    th.success += 'Data deleted';
+                    th.success += 'Data deleted.';
+                })
+                .catch(function(error) {
+                    let r = error.response.data;
+                    th.error += 'Fatal error. ';
+                    th.error += r.message ? r.message + ' ' : '';
+                });
+        },
+        activateUser(id, status) {
+            this.clearNotifications();
+            const th = this;
+            axios.get('/users/activate/' + id)
+                .then(function(response) {
+                    th.getData();
+                    if(status) {
+                        th.success += 'The user has been deactivated.';
+                    } else {
+                        th.success += 'The user has been activated.';
+                    }
                 })
                 .catch(function(error) {
                     let r = error.response.data;
