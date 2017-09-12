@@ -169,6 +169,7 @@ return [
          */
 
         Barryvdh\Debugbar\ServiceProvider::class,
+        Nwidart\Modules\LaravelModulesServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Module' => Nwidart\Modules\Facades\Module::class,
     ],
 
 ];
