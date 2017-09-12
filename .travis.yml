@@ -17,6 +17,7 @@ before_install:
   - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
   
 script:
+  - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
