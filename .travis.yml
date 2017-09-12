@@ -10,8 +10,8 @@ before_script:
   - php artisan key:generate
   - php artisan migrate:refresh
   - rm -rf node_modules
-  - npm install --no-bin-links
-  - npm rebuild node-sass --no-bin-link
+  - npm install 
+  - npm rebuild node-sass
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
