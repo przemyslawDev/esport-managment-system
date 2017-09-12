@@ -10,7 +10,6 @@ before_script:
   - php artisan key:generate
   - php artisan migrate:refresh
   - npm install
-  - npm run dev
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
@@ -18,6 +17,7 @@ before_install:
   - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
   
 script:
+  - npm run dev
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
