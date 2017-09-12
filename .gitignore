@@ -3,6 +3,7 @@
 /public/img
 /public/js
 /public/css
+/public/sb-admin
 /public/storage
 /storage/*.key
 /vendor
@@ -14,8 +15,7 @@ npm-debug.log
 yarn-error.log
 .env
 
-
-.vscode/*
+/.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
