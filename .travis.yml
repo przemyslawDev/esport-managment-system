@@ -7,7 +7,7 @@ before_script:
   - phpenv config-rm xdebug.ini
   - cp .env.travis .env
   - composer self-update
-  - composer install --no-interaction
+  - composer install --no-interaction --ignore-platform-reqs
   - php artisan key:generate
   - php artisan migrate
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
