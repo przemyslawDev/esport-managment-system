@@ -20,7 +20,7 @@ before_install:
   - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
   
 script:
-  - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
   
 services:
   - postgresql
