@@ -91,6 +91,21 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'testingg' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'port' => '3306',
+            'database' => 'homestead_test',
+            'username' => 'homestead',
+            'password' => 'secret',
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ]
+
     ],
 
     /*
