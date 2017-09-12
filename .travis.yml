@@ -18,8 +18,11 @@ before_install:
   - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
   
 script:
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-  
+  - phpdbg vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
+
 services:
   - postgresql
 
