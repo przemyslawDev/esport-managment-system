@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
+use Illuminate\Contracts\Auth\Guard;
 use Laratrust\Middleware\LaratrustPermission;
 
 class CustomLaratrustPermission extends LaratrustPermission
