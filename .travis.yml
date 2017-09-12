@@ -17,6 +17,7 @@ before_script:
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
   - psql -c "CREATE SCHEMA esport_test;" -U postgres
+  - psql -c "GRANT ALL ON SCHEMA esport_test TO USER homestead;" -U postgres
   
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml
