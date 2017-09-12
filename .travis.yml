@@ -13,7 +13,6 @@ before_script:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm install --global gulp-cli
   - npm install
-  - npm run prod
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
