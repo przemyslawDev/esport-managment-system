@@ -16,8 +16,8 @@ before_script:
   - npm run prod
 
 before_install:
-  - psql -c "CREATE DATABASE postgres;" -U esport_test
-  - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U esport_test
+  - psql -c "CREATE DATABASE postgres;" -U postgres
+  - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
   
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml
