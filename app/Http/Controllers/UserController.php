@@ -85,6 +85,17 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function resetPassword($id)
+    {
+        $random_password = str_random(10);
+
+        $user = User::findOrFail($id);
+        $user->password = bcrypt($random_password);
+        $user->save();
+
+        return response()->json($random_password);
+    }   
+
     public function destroy($id)
     {
         User::destroy($id);

@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers;
 use Tests\TestCase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 
 class UserControllerTest extends TestCase
 {
@@ -424,5 +425,38 @@ class UserControllerTest extends TestCase
 
         $response = $this->json('get', '/users/activate' . '/' . $user->id)
             ->assertStatus(403);
+    }
+
+    /** @test */
+    public function resetPassword_response_success_test() 
+    {
+        $this->createSystemAdmin();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
+            ->assertStatus(200);
+    }
+
+    /** @test */
+    public function resetPassword_as_admin_response_permission_error_test() 
+    {
+        $this->createAdmin();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
+        ->assertStatus(403);
+    }
+
+    /** @test */
+    public function resetPassword_as_guest_response_permission_error_test() 
+    {
+        $this->createUser();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
+        ->assertStatus(403);
     }
 }

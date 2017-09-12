@@ -3,9 +3,10 @@
         <i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
     </div>
     <div v-else>
+        <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
         <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
         <div v-else>
-            <a class="btn btn-primary" href="users/create">Create</a>
+            <a class="btn btn-primary btn-sm" href="users/create">Create</a>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -27,12 +28,13 @@
                             <td>{{ user.active }}</td>
                             <td>
                                 <div class="">
+                                    <a :href="'users/' + user.id" type="button" class="btn btn-info btn-sm">View</a>
                                     <a :href="'users/' + user.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
                                     <a v-on:click="deleteUser(user.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
-                                    <a v-on:click="activateUser(user.id)" type="button" class="btn btn-primary btn-sm">
+                                    <a v-on:click="activateUser(user.id, user.active)" type="button" class="btn btn-primary btn-sm">
                                         {{ (user.active ? 'Deactivate' : 'Activate') }}
                                     </a>
-                                    <a :href="'users/' + user.id" type="button" class="btn btn-info btn-sm">View</a>
+                                    <a v-on:click="resetPassword(user.id)" type="button" class="btn btn-warning btn-sm">Reset Password</a>
                                 </div>
                             </td>
                         </tr>
@@ -97,6 +99,22 @@ export default {
                     } else {
                         th.success += 'The user has been activated.';
                     }
+                })
+                .catch(function(error) {
+                    let r = error.response.data;
+                    th.error += 'Fatal error. ';
+                    th.error += r.message ? r.message + ' ' : '';
+                });
+        },
+        resetPassword(id) {
+            this.clearNotifications();
+            const th = this;
+            axios.get('/users/password/reset/' + id)
+                .then(function(response) {
+                    console.log(response.data);
+                    th.getData();
+                    th.success += "Password changed.";
+                    th.success += "New password: " + response.data;
                 })
                 .catch(function(error) {
                     let r = error.response.data;
