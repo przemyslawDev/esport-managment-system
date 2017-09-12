@@ -15,9 +15,7 @@ class LoginControllerTest extends TestCase
     /** @test */
     public function showLoginForm_response_success_test()
     {
-        $response = $this->get('/');
-        
-        $response->assertStatus(200);
+        $this->get('/')->assertStatus(200);
     }
 
     /** @test */
@@ -38,8 +36,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->post('/login', $data)
-            ->assertStatus(302);
+        $this->post('/login', $data)->assertStatus(302);
   
         $this->assertEquals(Auth::id(), $user->id);
         $this->assertTrue(Auth::user()->hasRole('guest'));
@@ -63,8 +60,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->post('/login', $data)
-            ->assertStatus(302);
+        $this->post('/login', $data)->assertStatus(302);
   
         $this->assertEquals(Auth::id(), $user->id);
         $this->assertTrue(Auth::user()->hasRole('admin'));
@@ -88,8 +84,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->post('/login', $data)
-            ->assertStatus(302);
+        $this->post('/login', $data)->assertStatus(302);
   
         $this->assertEquals(Auth::id(), $user->id);
         $this->assertTrue(Auth::user()->hasRole('system_admin'));
@@ -109,8 +104,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->post('/login', $data)
-            ->assertStatus(302);
+        $this->post('/login', $data)->assertStatus(302);
 
         $this->assertFalse(Auth::check());
     }
@@ -124,9 +118,7 @@ class LoginControllerTest extends TestCase
 
         $this->assertTrue(Auth::check());
 
-        $response = $this->get('/logout')
-            ->assertStatus(302)
-            ->assertRedirect('/');
+        $this->get('/logout')->assertStatus(302)->assertRedirect('/');
 
         $this->assertFalse(Auth::check());
     }

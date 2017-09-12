@@ -16,8 +16,7 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $response = $this->get('/users')
-            ->assertStatus(200);
+        $this->get('/users')->assertStatus(200);
     }
 
     /** @test */
@@ -25,8 +24,7 @@ class UserControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $response = $this->get('/users')
-            ->assertRedirect('/403');
+        $this->get('/users')->assertRedirect('/403');
     }
 
     /** @test */
@@ -34,8 +32,7 @@ class UserControllerTest extends TestCase
     {
         $this->createUser();
 
-        $response = $this->get('/users')
-            ->assertRedirect('/403');
+        $this->get('/users')->assertRedirect('/403');
     }
 
     /** @test */
@@ -43,7 +40,13 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $response = $this->json('get', '/users/get/all')->assertStatus(200);
+        $count = User::count();
+
+        $response = $this->json('get', '/users/get/all')
+            ->assertStatus(200)->decodeResponseJson();
+
+        $response_count = count($response);
+        $this->assertEquals($count, $response_count);
     }
 
     /** @test */
@@ -67,8 +70,7 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $response = $this->get('users/create')
-            ->assertStatus(200);
+        $this->get('users/create')->assertStatus(200);
     }
 
     /** @test */
@@ -76,8 +78,7 @@ class UserControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $response = $this->get('users/create')
-            ->assertRedirect(403);
+        $this->get('users/create')->assertRedirect(403);
     }
 
     /** @test */
@@ -85,8 +86,7 @@ class UserControllerTest extends TestCase
     {
         $this->createUser();
 
-        $response = $this->get('users/create')
-            ->assertRedirect(403);
+        $this->get('users/create')->assertRedirect(403);
     }
 
     /** @test */
@@ -96,8 +96,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
     
-        $response = $this->get('/users' . '/' . $user->id)
-            ->assertStatus(200);
+        $this->get('/users' . '/' . $user->id)->assertStatus(200);
     }
 
     /** @test */
@@ -107,8 +106,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->get('/users' . '/' . $user->id)
-            ->assertRedirect('/403');
+        $this->get('/users' . '/' . $user->id)->assertRedirect('/403');
     }
 
     /** @test */
@@ -118,8 +116,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->get('/users' . '/' . $user->id)
-            ->assertRedirect('/403');
+        $this->get('/users' . '/' . $user->id)->assertRedirect('/403');
     }
 
     /** @test */
@@ -130,7 +127,9 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('get', '/users/user' . '/' . $user->id)
-            ->assertStatus(200);
+            ->assertStatus(200)->decodeResponseJson();
+
+        $this->assertNotEmpty($response);
     }
 
     /** @test */
@@ -140,7 +139,7 @@ class UserControllerTest extends TestCase
         
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/user' . '/' . $user->id)
+        $this->json('get', '/users/user' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -151,7 +150,7 @@ class UserControllerTest extends TestCase
         
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/user' . '/' . $user->id)
+        $this->json('get', '/users/user' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -165,8 +164,7 @@ class UserControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->json('post', '/users', $data)
-            ->assertStatus(200);
+        $this->json('post', '/users', $data)->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com'
@@ -183,8 +181,7 @@ class UserControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->json('post', '/users', $data)
-            ->assertStatus(403);
+        $this->json('post', '/users', $data)->assertStatus(403);
     }
 
     /** @test */
@@ -197,8 +194,7 @@ class UserControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $response = $this->json('post', '/users', $data)
-            ->assertStatus(403);
+        $this->json('post', '/users', $data)->assertStatus(403);
     }
 
     /** @test */
@@ -221,13 +217,13 @@ class UserControllerTest extends TestCase
             ]);
         
         $this->json('post', '/users', $data->except('password')->toArray())
-        ->assertStatus(422)
-        ->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'password' => ['The password field is required.']
-            ]
-        ]); 
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'password' => ['The password field is required.']
+                ]
+            ]); 
                     
     }
 
@@ -238,7 +234,7 @@ class UserControllerTest extends TestCase
         
         $user = factory(User::class)->create();
 
-        $response = $this->get('/users' . '/' . $user->id . '/edit')
+        $this->get('/users' . '/' . $user->id . '/edit')
             ->assertStatus(200);
     }
     
@@ -249,7 +245,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->get('/users' . '/' . $user->id . '/edit')
+        $this->get('/users' . '/' . $user->id . '/edit')
             ->assertRedirect('/403');
     }
 
@@ -260,7 +256,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->get('/users' . '/' . $user->id . '/edit')
+        $this->get('/users' . '/' . $user->id . '/edit')
             ->assertRedirect('/403');
     }
 
@@ -276,7 +272,7 @@ class UserControllerTest extends TestCase
             'roles' => [1,2]
         ];
 
-        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+        $this->json('put', '/users' . '/' . $user->id, $data)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
@@ -309,7 +305,7 @@ class UserControllerTest extends TestCase
             'avatar' => $user->avatar
         ];
 
-        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+        $this->json('put', '/users' . '/' . $user->id, $data)
             ->assertStatus(403);
     }
 
@@ -325,7 +321,7 @@ class UserControllerTest extends TestCase
             'avatar' => $user->avatar
         ];
 
-        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+        $this->json('put', '/users' . '/' . $user->id, $data)
             ->assertStatus(403);
     }
 
@@ -357,7 +353,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('delete', '/users' . '/' . $user->id)
+        $this->json('delete', '/users' . '/' . $user->id)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('users', [
@@ -373,7 +369,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('delete', '/users' . '/' . $user->id)
+        $this->json('delete', '/users' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -384,7 +380,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('delete', '/users' . '/' . $user->id)
+        $this->json('delete', '/users' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -395,7 +391,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create(['active' => false]);
 
-        $response = $this->json('get', '/users/activate' . '/' . $user->id)
+        $this->json('get', '/users/activate' . '/' . $user->id)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
@@ -412,7 +408,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/activate' . '/' . $user->id)
+        $this->json('get', '/users/activate' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -423,7 +419,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/activate' . '/' . $user->id)
+        $this->json('get', '/users/activate' . '/' . $user->id)
             ->assertStatus(403);
     }
 
@@ -435,7 +431,9 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
-            ->assertStatus(200);
+            ->assertStatus(200)->decodeResponseJson();
+
+        $this->assertNotEmpty($response);
     }
 
     /** @test */
@@ -445,8 +443,8 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
-        ->assertStatus(403);
+        $this->json('get', '/users/password/reset' . '/' . $user->id)
+            ->assertStatus(403);
     }
 
     /** @test */
@@ -456,7 +454,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
-        ->assertStatus(403);
+        $this->json('get', '/users/password/reset' . '/' . $user->id)
+            ->assertStatus(403);
     }
 }

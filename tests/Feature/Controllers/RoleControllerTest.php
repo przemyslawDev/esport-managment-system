@@ -15,8 +15,13 @@ class RoleControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
+        $count = Role::count();
+
         $response = $this->json('get', '/roles/get/all')
-            ->assertStatus(200);
+            ->assertStatus(200)->decodeResponseJson();
+
+        $response_count = count($response);
+        $this->assertEquals($count, $response_count);
     }
 
     /** @test */
@@ -24,7 +29,7 @@ class RoleControllerTest extends TestCase
     {
         $this->createAdmin();
         
-        $response = $this->json('get', '/roles/get/all')
+        $this->json('get', '/roles/get/all')
             ->assertStatus(403);
     }
 
@@ -33,7 +38,7 @@ class RoleControllerTest extends TestCase
     {
         $this->createUser();
         
-        $response = $this->json('get', '/roles/get/all')
+        $this->json('get', '/roles/get/all')
             ->assertStatus(403);
     }
 }
