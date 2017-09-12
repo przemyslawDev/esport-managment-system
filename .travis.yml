@@ -9,7 +9,9 @@ before_script:
   - composer install --no-interaction --ignore-platform-reqs
   - php artisan key:generate
   - php artisan migrate:refresh
-  - npm install
+  - rm -rf node_modules
+  - npm install --no-bin-links
+  - npm rebuild node-sass --no-bin-link
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
