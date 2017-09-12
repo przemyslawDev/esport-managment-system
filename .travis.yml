@@ -23,7 +23,7 @@ script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml
   
 services:
-  - mysql
+  - postgresql
 
 cache:
   directories:
