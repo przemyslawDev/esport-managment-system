@@ -10,7 +10,7 @@ before_script:
   - php artisan key:generate
   - php artisan migrate:refresh
   - npm install
-  - npm run prod
+  - npm run dev
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
