@@ -115,7 +115,7 @@ return [
             'emials' => 'Mail',
             'notifications' => 'Notifications',
 
-            'factories' => 'Factories'
+            'factories' => 'Database/Factories'
         ],
     ],
     /*
@@ -144,10 +144,10 @@ return [
     */
 
     'composer' => [
-        'vendor' => 'nwidart',
+        'vendor' => 'przemyslawDev',
         'author' => [
-            'name' => 'Nicolas Widart',
-            'email' => 'n.widart@gmail.com',
+            'name' => 'Przemysław Łapiński',
+            'email' => 'przemyslaw.lapinski.dev@gmail.com',
         ],
     ],
     /*
