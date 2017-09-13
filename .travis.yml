@@ -7,7 +7,6 @@ before_script:
   - cp .env.travis .env
   - composer self-update
   - composer install --no-interaction --ignore-platform-reqs
-  - composer dump-autoload
   - php artisan key:generate
   - php artisan migrate:refresh
   - rm -rf node_modules
@@ -21,6 +20,7 @@ before_install:
   
 script:
   - npm run prod
+  - composer dump-autoload
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
