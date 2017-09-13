@@ -16,7 +16,7 @@ class UserTest extends TestCase
             ->each(function ($u) {
                 $u->employee()->save(factory(Employee::class)->create(['user_id' => $u->id]));
             });
-
+            
         $this->assertNotEmpty($user);
     }
 }
