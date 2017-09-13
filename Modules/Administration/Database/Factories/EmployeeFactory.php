@@ -16,6 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(Modules\Administration\Models\Employee::class, function (Faker $faker) {
 
     return [
+        'user_id' => null,
         'firstname' => $faker->firstName,
         'lastname' => $faker->lastName,
         'office' => $faker->title,

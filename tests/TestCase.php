@@ -24,7 +24,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->actingAs($user);
 
-        return $this;
+        return $user;
     }
 
     protected function createAdmin() 
@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->actingAs($user);
 
-        return $this;
+        return $user;
     }
 
     protected function createSystemAdmin()
@@ -58,6 +58,6 @@ abstract class TestCase extends BaseTestCase
 
         $this->actingAs($user);
 
-        return $this;
+        return $user;
     }
 }

@@ -15,7 +15,6 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var moduleNamespace = '../../../Modules';
 
 Vue.component('dashboard', require('./views/Dashboard.vue'));
 Vue.component('users', require('./views/users/Users.vue'));
@@ -24,7 +23,7 @@ Vue.component('user-create', require('./views/users/UserCreate.vue'));
 Vue.component('user-edit', require('./views/users/UserEdit.vue'));
 
 //Administration module components
-require(moduleNamespace + '/Administration/Assets/js/app');
+require('../../../Modules/Administration/Assets/js/app');
 
 const app = new Vue({
     el: '#app'

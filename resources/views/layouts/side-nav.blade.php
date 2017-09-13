@@ -5,6 +5,8 @@
                 <li><a href="{{ route('dashboard') }}">{{ _('Dashboard') }}</a></li>
                 @if(Auth::user()->hasRole('system_admin'))
                     @include('layouts.navs.system-admin')
+                @elseif(Auth::user()->hasRole('admin'))
+                    @include('layouts.navs.admin');
                 @endif
             </ul>
         </div>
