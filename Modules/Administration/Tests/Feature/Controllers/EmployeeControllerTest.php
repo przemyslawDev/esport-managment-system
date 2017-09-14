@@ -23,7 +23,7 @@ class EmployeeControllerTest extends TestCase
     /** @test */
     public function index_as_guest_reponse_permission_error_test()
     {
-        $this->get('/administration/employees')->assertRedirect('/403');
+        $this->get('/administration/employees')->assertRedirect('/');
     }
 
     /** @test */
@@ -45,7 +45,7 @@ class EmployeeControllerTest extends TestCase
     public function getAll_as_guest_response_permission_error_test()
     {
         $this->json('get', '/administration/employees/get/all')
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class EmployeeControllerTest extends TestCase
     /** @test */
     public function create_as_guest_response_permission_error_test()
     {
-        $this->get('/administration/employees/create')->assertRedirect('/403');
+        $this->get('/administration/employees/create')->assertRedirect('/');
     }
 
     /** @test */
@@ -80,7 +80,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
 
         $this->get('/administration/employees/' . $employee->id)
-            ->assertRedirect('/403');
+            ->assertRedirect('/');
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
         
         $this->json('get', '/administration/employees/employee/' . $employee->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -129,7 +129,7 @@ class EmployeeControllerTest extends TestCase
         $data= [];
 
         $this->json('post', '/administration/employees', $data)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -198,7 +198,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
         
         $this->get('/administration/employees' . '/' . $employee->id . '/edit')
-            ->assertRedirect('/403');
+            ->assertRedirect('/');
     }
 
     /** @test */
@@ -229,7 +229,7 @@ class EmployeeControllerTest extends TestCase
         $data = [];
 
         $this->json('put', '/administration/employees' . '/' . $employee->id, $data)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -306,6 +306,6 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
         
         $this->json('delete', '/administration/employees' . '/' . $employee->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 }

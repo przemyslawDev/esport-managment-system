@@ -10,23 +10,6 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function createUser() 
-    {
-        $user = factory(User::class)->create([
-            'email' => 'usertest@example.com',
-            'password' => bcrypt('test'),
-            'active' => true
-        ]);
-
-        $role = Role::where('name', 'guest')->first();
-        
-        $user->attachRole($role);
-
-        $this->actingAs($user);
-
-        return $user;
-    }
-
     protected function createAdmin() 
     {
         $user = factory(User::class)->create([

@@ -13,7 +13,7 @@ class DashboardControllerTest extends TestCase
     /** @test */
     public function dashboard_response_success_test()
     {
-        $this->createUser();
+        $this->createAdmin();
 
         $this->get('/dashboard')->assertStatus(200);
     }
@@ -21,6 +21,6 @@ class DashboardControllerTest extends TestCase
     /** @test */
     public function dashboard_response_permission_error_test()
     {
-        $this->get('/dashboard')->assertStatus(302)->assertRedirect('/');
+        $this->get('/dashboard')->assertRedirect('/');
     }
 }

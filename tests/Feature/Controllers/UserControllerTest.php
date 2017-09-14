@@ -32,9 +32,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function index_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
-        $this->get('/users')->assertRedirect('/403');
+        $this->get('/users')->assertRedirect('/');
     }
 
     /** @test */
@@ -62,9 +60,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function getAll_as_guest_response_permission_error_test() 
     {
-        $this->createUser();
-
-        $this->json('get', '/users/get/all')->assertStatus(403);
+        $this->json('get', '/users/get/all')->assertStatus(401);
     }
 
     /** @test */
@@ -86,9 +82,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function create_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
-        $this->get('users/create')->assertRedirect(403);
+        $this->get('users/create')->assertRedirect('/');
     }
 
     /** @test */
@@ -114,11 +108,9 @@ class UserControllerTest extends TestCase
     /** @test */
     public function show_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
-        $this->get('/users' . '/' . $user->id)->assertRedirect('/403');
+        $this->get('/users' . '/' . $user->id)->assertRedirect('/');
     }
 
     /** @test */
@@ -147,13 +139,11 @@ class UserControllerTest extends TestCase
 
     /** @test */
     public function get_as_guest_response_permission_error_test() 
-    {
-        $this->createUser();
-        
+    {   
         $user = factory(User::class)->create();
 
         $this->json('get', '/users/user' . '/' . $user->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -164,7 +154,7 @@ class UserControllerTest extends TestCase
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => [1],
+            'roles' => [3],
             'type' => 'none'
         ];
 
@@ -178,7 +168,7 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseHas('role_user', [
             'user_id' => $user->id,
-            'role_id' => 1
+            'role_id' => 3
         ]);
     }
 
@@ -190,7 +180,7 @@ class UserControllerTest extends TestCase
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => [1],
+            'roles' => [3],
             'type' => 'employee',
             'firstname' => 'test',
             'lastname' => 'test',
@@ -208,7 +198,7 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseHas('role_user', [
             'user_id' => $user->id,
-            'role_id' => 1
+            'role_id' => 3
         ]);
 
         $this->assertDatabaseHas('employees', [
@@ -232,11 +222,9 @@ class UserControllerTest extends TestCase
     /** @test */
     public function store_as_guest_response_permissions_error_test()
     {
-        $this->createUser();
-
         $data = [];
 
-        $this->json('post', '/users', $data)->assertStatus(403);
+        $this->json('post', '/users', $data)->assertStatus(401);
     }
 
     /** @test */
@@ -247,7 +235,7 @@ class UserControllerTest extends TestCase
         $data = collect([
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => 1,
+            'roles' => [3],
             'type' => 'none'
         ]);
 
@@ -297,7 +285,7 @@ class UserControllerTest extends TestCase
          $data = collect([
              'email' => 'test@example.com',
              'password' => 'test123',
-             'roles' => 1,
+             'roles' => [3],
              'type' => 'employee',
              'firstname' => 'test',
              'lastname' => 'test',
@@ -403,12 +391,10 @@ class UserControllerTest extends TestCase
     /** @test */
     public function edit_as_guest_response_permissions_error_test()
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
         $this->get('/users' . '/' . $user->id . '/edit')
-            ->assertRedirect('/403');
+            ->assertRedirect('/');
     }
 
     /** @test */
@@ -420,7 +406,7 @@ class UserControllerTest extends TestCase
 
         $data = [
             'email' => 'test@example.com',
-            'roles' => [1,2]
+            'roles' => [2,3]
         ];
 
         $this->json('put', '/users' . '/' . $user->id, $data)
@@ -435,12 +421,12 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseHas('role_user', [
             'user_id' => $user->id,
-            'role_id' => 1
+            'role_id' => 2
         ]);
 
         $this->assertDatabaseHas('role_user', [
             'user_id' => $user->id,
-            'role_id' => 2
+            'role_id' => 3
         ]);
     }
 
@@ -460,14 +446,12 @@ class UserControllerTest extends TestCase
     /** @test */
     public function update_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
         $data = [];
 
         $this->json('put', '/users' . '/' . $user->id, $data)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -521,12 +505,10 @@ class UserControllerTest extends TestCase
     /** @test */
     public function destroy_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
         $this->json('delete', '/users' . '/' . $user->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -560,12 +542,10 @@ class UserControllerTest extends TestCase
     /** @test */
     public function activate_as_guest_response_permission_error_test()
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
         $this->json('get', '/users/activate' . '/' . $user->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -595,11 +575,9 @@ class UserControllerTest extends TestCase
     /** @test */
     public function resetPassword_as_guest_response_permission_error_test() 
     {
-        $this->createUser();
-
         $user = factory(User::class)->create();
 
         $this->json('get', '/users/password/reset' . '/' . $user->id)
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 }
