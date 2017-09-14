@@ -4,8 +4,10 @@ namespace Tests\Feature\Controllers;
 
 use Tests\TestCase;
 use App\User;
+use App\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class UserControllerTest extends TestCase
 {
@@ -155,19 +157,66 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function store_response_success_test()
+    public function store_user_response_success_test()
     {
         $this->createSystemAdmin();
 
         $data = [
             'email' => 'test@example.com',
-            'password' => 'test123'
+            'password' => 'test123',
+            'roles' => [1],
+            'type' => 'none'
         ];
 
         $this->json('post', '/users', $data)->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com'
+        ]);
+
+        $user = User::where('email', 'test@example.com')->first();
+
+        $this->assertDatabaseHas('role_user', [
+            'user_id' => $user->id,
+            'role_id' => 1
+        ]);
+    }
+
+    /** @test */
+    public function store_user_employee_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $data = [
+            'email' => 'test@example.com',
+            'password' => 'test123',
+            'roles' => [1],
+            'type' => 'employee',
+            'firstname' => 'test',
+            'lastname' => 'test',
+            'office' => 'test',
+            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
+            'status' => 1
+        ];
+
+        $this->json('post', '/users', $data)->assertStatus(200);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'test@example.com'
+        ]);
+
+        $user = User::where('email', 'test@example.com')->first();
+
+        $this->assertDatabaseHas('role_user', [
+            'user_id' => $user->id,
+            'role_id' => 1
+        ]);
+
+        $this->assertDatabaseHas('employees', [
+            'user_id' => $user->id,
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'office' => $data['office']
         ]);
     }
 
@@ -176,10 +225,7 @@ class UserControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $data = [
-            'email' => 'test@example.com',
-            'password' => 'test123'
-        ];
+        $data = [];
 
         $this->json('post', '/users', $data)->assertStatus(403);
     }
@@ -189,22 +235,21 @@ class UserControllerTest extends TestCase
     {
         $this->createUser();
 
-        $data = [
-            'email' => 'test@example.com',
-            'password' => 'test123'
-        ];
+        $data = [];
 
         $this->json('post', '/users', $data)->assertStatus(403);
     }
 
     /** @test */
-    public function store_response_validation_fail_test() 
+    public function store_user_response_validation_fail_test() 
     {
         $this->createSystemAdmin();
 
         $data = collect([
             'email' => 'test@example.com',
-            'password' => 'test123'
+            'password' => 'test123',
+            'roles' => 1,
+            'type' => 'none'
         ]);
 
         $this->json('post', '/users', $data->except('email')->toArray())
@@ -224,8 +269,126 @@ class UserControllerTest extends TestCase
                     'password' => ['The password field is required.']
                 ]
             ]); 
-                    
+
+        $this->json('post', '/users', $data->except('roles')->toArray())
+        ->assertStatus(422)
+        ->assertJson([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'roles' => ['The roles field is required.']
+            ]
+        ]);
+
+        $this->json('post', '/users', $data->except('type')->toArray())
+        ->assertStatus(422)
+        ->assertJson([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'type' => ['The type field is required.']
+            ]
+        ]);
+
     }
+
+     /** @test */
+     public function store_user_employee_response_validation_fail_test() 
+     {
+         $this->createSystemAdmin();
+ 
+         $data = collect([
+             'email' => 'test@example.com',
+             'password' => 'test123',
+             'roles' => 1,
+             'type' => 'employee',
+             'firstname' => 'test',
+             'lastname' => 'test',
+             'office' => 'test',
+             'birthdate' => Carbon::now()->subYears(20)->toDateString(),
+             'status' => 1
+         ]);
+ 
+         $this->json('post', '/users', $data->except('email')->toArray())
+             ->assertStatus(422)
+             ->assertJson([
+                 'message' => 'The given data was invalid.',
+                 'errors' => [
+                     'email' => ['The email field is required.']
+                 ]
+             ]);
+         
+         $this->json('post', '/users', $data->except('password')->toArray())
+             ->assertStatus(422)
+             ->assertJson([
+                 'message' => 'The given data was invalid.',
+                 'errors' => [
+                     'password' => ['The password field is required.']
+                 ]
+             ]); 
+ 
+         $this->json('post', '/users', $data->except('roles')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'roles' => ['The roles field is required.']
+             ]
+         ]);
+
+         $this->json('post', '/users', $data->except('type')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'type' => ['The type field is required.']
+             ]
+         ]);
+        
+         $this->json('post', '/users', $data->except('firstname')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'firstname' => ['The firstname field is required unless type is in none.']
+             ]
+         ]);
+
+         $this->json('post', '/users', $data->except('lastname')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'lastname' => ['The lastname field is required unless type is in none.']
+             ]
+         ]);
+
+         $this->json('post', '/users', $data->except('office')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'office' => ['The office field is required unless type is in none.']
+             ]
+         ]);
+
+         $this->json('post', '/users', $data->except('birthdate')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'birthdate' => ['The birthdate field is required unless type is in none.']
+             ]
+         ]);
+
+         $this->json('post', '/users', $data->except('status')->toArray())
+         ->assertStatus(422)
+         ->assertJson([
+             'message' => 'The given data was invalid.',
+             'errors' => [
+                 'status' => ['The status field is required unless type is in none.']
+             ]
+         ]);
+ 
+     }
 
     /** @test */
     public function edit_response_success_test()
@@ -300,10 +463,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $data = [
-            'email' => 'test@example.com',
-            'avatar' => $user->avatar
-        ];
+        $data = [];
 
         $this->json('put', '/users' . '/' . $user->id, $data)
             ->assertStatus(403);
@@ -316,10 +476,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $data = [
-            'email' => 'test@example.com',
-            'avatar' => $user->avatar
-        ];
+        $data = [];
 
         $this->json('put', '/users' . '/' . $user->id, $data)
             ->assertStatus(403);

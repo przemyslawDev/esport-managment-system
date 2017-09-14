@@ -16,6 +16,11 @@
                 <table class="table table-user-information">
                   <tbody>
                     <tr>
+                      <td>Email</td>
+                      <td>{{ employee.user.email }}</td>  
+                    </tr>
+                    
+                    <tr>
                       <td>Office</td>
                       <td>{{ employee.office }}</td>
                     </tr>

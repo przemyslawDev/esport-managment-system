@@ -25,7 +25,15 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'roles' => 'required|array',
+            'type' => 'required',
+
+            'firstname' => 'required_unless:type,none|min:2|max:255',
+            'lastname' => 'required_unless:type,none|min:2|max:255',
+            'office' => 'required_unless:type,none|min:2"max:255',
+            'birthdate' => 'required_unless:type,none|date|before:tomorrow',
+            'status' => 'required_unless:type,none|integer'
         ];
     }
 }
