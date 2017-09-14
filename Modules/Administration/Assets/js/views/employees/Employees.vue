@@ -13,6 +13,7 @@
                         <tr>
                             <th>Firstname</th>
                             <th>Lastname</tH>
+                            <th>Email</th>
                             <th>Office</th>
                             <th>Birthdate</th>
                             <th>Status</th>
@@ -23,6 +24,10 @@
                         <tr v-for="employee in employees">
                             <td>{{ employee.firstname }}</td>
                             <td>{{ employee.lastname }}</td>
+                            <template>
+                                <td v-if="employee.user">{{ employee.user.email }}</td>
+                                <td v-else></td>
+                            </template>
                             <td>{{ employee.office }}</td>
                             <td>{{ employee.birthdate }}</td>
                             <td>{{ employee.status }}</td>

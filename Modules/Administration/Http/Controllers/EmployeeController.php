@@ -22,7 +22,7 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
-        $employees = Employee::all();
+        $employees = Employee::with('user')->get();
 
         return response()->json($employees);
     }
@@ -65,7 +65,7 @@ class EmployeeController extends Controller
 
     public function get($id)
     {
-        $employee = Employee::find($id)->first();
+        $employee = Employee::find($id)->with('user')->first();
 
         return response()->json($employee);
     }
