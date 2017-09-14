@@ -20,7 +20,6 @@ $factory->define(Modules\Administration\Models\Employee::class, function (Faker 
         'firstname' => $faker->firstName,
         'lastname' => $faker->lastName,
         'office' => $faker->title,
-        'birthdate' => $faker->date,
-        'status' => 1
+        'birthdate' => $faker->date
     ];
 });

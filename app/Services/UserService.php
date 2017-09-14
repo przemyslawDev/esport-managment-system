@@ -44,8 +44,7 @@ class UserService
             'firstname' => $array['firstname'],
             'lastname' => $array['lastname'],
             'office' => $array['office'],
-            'birthdate' => $array['birthdate'],
-            'status' => $array['status']
+            'birthdate' => $array['birthdate']
         ]);
     }
 }

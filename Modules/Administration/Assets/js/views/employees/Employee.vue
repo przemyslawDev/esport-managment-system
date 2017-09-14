@@ -30,11 +30,6 @@
                       <td>{{ employee.birthdate }}</td>
                     </tr>
 
-                    <tr>
-                      <td>Status</td>
-                      <td>{{ employee.status }}</td>
-                    </tr>
-
                   </tbody>
                 </table>
                 

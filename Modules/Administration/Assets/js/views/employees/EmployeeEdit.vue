@@ -22,12 +22,6 @@
                 <label>Birthdate</label>
                 <input class="form-control" v-model="employee.birthdate" placeholder="MM-DD-YYYY">
             </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select class="form-control" v-model="employee.status">
-                    <option v-for="status in statusOptions" :value="status.value">{{ status.text }}</option>
-                </select>
-            </div>
             <button v-if="sending" class="btn btn-success"><i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></button>
             <button v-else @click="submit" class="btn btn-success">Submit</button>
         </form>
@@ -42,21 +36,7 @@ export default {
             error: '',
             loading: false,
             sending: false,
-            employee: {},
-            statusOptions: [
-                {
-                    text: '0',
-                    value: 0
-                },
-                {
-                    text: '1',
-                    value: 1
-                },
-                {
-                    text: '2',
-                    value: 2
-                }
-            ]
+            employee: {}
         }
     },
     mounted() {
@@ -86,7 +66,6 @@ export default {
                 lastname: this.employee.lastname,
                 office: this.employee.office,
                 birthdate: this.employee.birthdate,
-                status: this.employee.status
             }
             this.makeRequest(data);
         },
@@ -106,7 +85,6 @@ export default {
                     th.error += r.errors.lastname ? r.errors.lastname + ' ' : '';
                     th.error += r.errors.office ? r.errors.office + ' ' : '';
                     th.error += r.errors.birthdate ? r.errors.birthdate + ' ' : '';
-                    th.error += r.errors.status ? r.errors.status + ' ' : '';
                 } else {
                     th.error += 'Fatal error. '
                     th.error += r.message ? r.message + ' ' : '';

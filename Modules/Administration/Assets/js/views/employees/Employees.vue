@@ -16,7 +16,6 @@
                             <th>Email</th>
                             <th>Office</th>
                             <th>Birthdate</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -30,7 +29,6 @@
                             </template>
                             <td>{{ employee.office }}</td>
                             <td>{{ employee.birthdate }}</td>
-                            <td>{{ employee.status }}</td>
                             <td>
                                 <div class="">
                                     <a :href="'employees/' + employee.id" type="button" class="btn btn-info btn-sm">View</a>
