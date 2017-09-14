@@ -17,8 +17,7 @@ class UpdateEmployeeRequest extends FormRequest
             'firstname' => 'required|alpha|min:2|max:255',
             'lastname' => 'required|alpha|min:2|max:255',
             'office' => 'required|alpha|min:2|max:255',
-            'birthdate' => 'required|date|before:tomorrow',
-            'status' => 'required|integer'
+            'birthdate' => 'required|date|before:tomorrow'
         ];
     }
 

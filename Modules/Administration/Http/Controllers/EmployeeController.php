@@ -48,7 +48,6 @@ class EmployeeController extends Controller
         $employee->lastname = $request->input('lastname');
         $employee->office = $request->input('office');
         $employee->birthdate = $request->input('birthdate');
-        $employee->status = $request->input('status');
         $employee->save();
 
         return response()->json($employee);
@@ -91,7 +90,6 @@ class EmployeeController extends Controller
         $employee->lastname = $request->input('lastname');
         $employee->office = $request->input('office');
         $employee->birthdate = $request->input('birthdate');
-        $employee->status = $request->input('status');
         $employee->save();
 
         return response()->json($employee);

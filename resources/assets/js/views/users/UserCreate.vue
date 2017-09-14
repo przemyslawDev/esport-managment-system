@@ -45,12 +45,6 @@
                     <label>Birthdate</label>
                     <input class="form-control" v-model="user.employee.birthdate" placeholder="MM-DD-YYYY"></input>
                 </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select class="form-control" v-model="user.employee.status">
-                        <option v-for="status in statusOptions" :value="status.value">{{ status.text }}</option>
-                    </select>
-                </div>
             </template>
 
             <button v-if="sending" class="btn btn-success"><i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></button>
@@ -75,8 +69,7 @@ export default {
                     firstname: '',
                     lastname: '',
                     office: '',
-                    birthdate: '',
-                    status: 1
+                    birthdate: ''
                 },
                 type: 'none'
             },
@@ -89,20 +82,6 @@ export default {
                 {
                     text: 'Employee',
                     value: 'employee'
-                }
-            ],
-            statusOptions: [
-                {
-                    text: '0',
-                    value: 0
-                },
-                {
-                    text: '1',
-                    value: 1
-                },
-                {
-                    text: '2',
-                    value: 2
                 }
             ]
         }
@@ -136,8 +115,7 @@ export default {
                 firstname: this.user.employee.firstname,
                 lastname: this.user.employee.lastname,
                 office: this.user.employee.office,
-                birthdate: this.user.employee.birthdate,
-                status: this.user.employee.status
+                birthdate: this.user.employee.birthdate
             }
             this.makeRequest(data);
         },
@@ -161,7 +139,6 @@ export default {
                     th.error += r.errors.lastname ? r.errors.lastname + ' ' : '';
                     th.error += r.errors.office ? r.errors.office + ' ' : '';
                     th.error += r.errors.birthdate ? r.errors.birthdate + ' ' : '';
-                    th.error += r.errors.status ? r.errors.status + ' ' : '';
                 } else {
                     th.error += 'Fatal error. '
                     th.error += r.message ? r.message + ' ' : '';

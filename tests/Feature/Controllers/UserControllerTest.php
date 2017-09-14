@@ -195,8 +195,7 @@ class UserControllerTest extends TestCase
             'firstname' => 'test',
             'lastname' => 'test',
             'office' => 'test',
-            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-            'status' => 1
+            'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ];
 
         $this->json('post', '/users', $data)->assertStatus(200);
@@ -303,8 +302,7 @@ class UserControllerTest extends TestCase
              'firstname' => 'test',
              'lastname' => 'test',
              'office' => 'test',
-             'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-             'status' => 1
+             'birthdate' => Carbon::now()->subYears(20)->toDateString()
          ]);
  
          $this->json('post', '/users', $data->except('email')->toArray())
@@ -378,16 +376,6 @@ class UserControllerTest extends TestCase
                  'birthdate' => ['The birthdate field is required unless type is in none.']
              ]
          ]);
-
-         $this->json('post', '/users', $data->except('status')->toArray())
-         ->assertStatus(422)
-         ->assertJson([
-             'message' => 'The given data was invalid.',
-             'errors' => [
-                 'status' => ['The status field is required unless type is in none.']
-             ]
-         ]);
- 
      }
 
     /** @test */

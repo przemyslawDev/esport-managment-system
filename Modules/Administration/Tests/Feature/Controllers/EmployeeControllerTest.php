@@ -114,8 +114,7 @@ class EmployeeControllerTest extends TestCase
             'firstname' => 'test',
             'lastname' => 'test',
             'office' => 'test',
-            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-            'status' => 1
+            'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ];
 
         $this->json('post', '/administration/employees', $data)
@@ -142,8 +141,7 @@ class EmployeeControllerTest extends TestCase
             'firstname' => 'test',
             'lastname' => 'test',
             'office' => 'test',
-            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-            'status' => 1
+            'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ]);
 
         $this->json('post', '/administration/employees', $data->except('firstname')->toArray())
@@ -181,15 +179,6 @@ class EmployeeControllerTest extends TestCase
                 'birthdate' => ['The birthdate field is required.']
             ]
         ]);
-
-        $this->json('post', '/administration/employees', $data->except('status')->toArray())
-        ->assertStatus(422)
-        ->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'status' => ['The status field is required.']
-            ]
-        ]);
     }
 
     /** @test */
@@ -223,8 +212,7 @@ class EmployeeControllerTest extends TestCase
             'firstname' => 'test',
             'lastname' => 'test',
             'office' => 'test',
-            'birthdate' => Carbon::today()->subYears(20)->toDateString(),
-            'status' => 1
+            'birthdate' => Carbon::today()->subYears(20)->toDateString()
         ];
 
         $this->json('put', '/administration/employees' . '/' . $employee->id, $data)
@@ -255,8 +243,7 @@ class EmployeeControllerTest extends TestCase
             'firstname' => 'test',
             'lastname' => 'test',
             'office' => 'test',
-            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-            'status' => 1
+            'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ]);
 
         $this->json('put', '/administration/employees' . '/' . $employee->id, $data->except('firstname')->toArray())
@@ -292,15 +279,6 @@ class EmployeeControllerTest extends TestCase
             'message' => 'The given data was invalid.',
             'errors' => [
                 'birthdate' => ['The birthdate field is required.']
-            ]
-        ]);
-        
-        $this->json('put', '/administration/employees' . '/' . $employee->id, $data->except('status')->toArray())
-        ->assertStatus(422)
-        ->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'status' => ['The status field is required.']
             ]
         ]);
     }   

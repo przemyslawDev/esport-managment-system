@@ -20,7 +20,6 @@ class CreateEmployeesTable extends Migration
             $table->string('lastname');
             $table->string('office');
             $table->string('birthdate');
-            $table->string('status');
             $table->timestamps();
         });
     }
