@@ -35,10 +35,8 @@ class RoleControllerTest extends TestCase
 
     /** @test */
     public function getAll_as_guest_response_permission_error_test()
-    {
-        $this->createUser();
-        
+    {   
         $this->json('get', '/roles/get/all')
-            ->assertStatus(403);
+            ->assertStatus(401);
     }
 }
