@@ -9,13 +9,18 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Datepicker from 'vuejs-datepicker';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('datepicker', Datepicker);
 Vue.component('pagination', require('./components/Pagination.vue'));
+Vue.component('input-text', require('./components/InputText.vue'));
+Vue.component('spinner', require('./components/Spinner.vue'));
+Vue.component('spinner-button', require('./components/SpinnerButton.vue'))
 
 Vue.component('dashboard', require('./views/Dashboard.vue'));
 Vue.component('users', require('./views/users/Users.vue'));

@@ -1,24 +1,22 @@
 <template>
-    <div class="text-center" v-if="loading">
-        <i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
-    </div>
-    <div v-else>
-        <form v-on:submit.prevent>
-            <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
-            <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-            <div class="form-group">
-                <label>Email</label>
-                <input class="form-control" v-model="user.email" placeholder="Email">
-            </div>
-            <div v-if="!loading_roles" class="form-group">
-                <label>Roles:</label>
-                <select multiple class="form-control" v-model="roles_ids">
-                    <option v-for="role in roles" :value="role.id">{{ role.display_name }}</option>
-                </select>
-            </div>
-            <button v-if="sending" class="btn btn-success"><i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></button>
-            <button v-else @click="submit" class="btn btn-success">Submit</button>
-        </form>
+    <div>
+        <spinner :condition="loading"></spinner>
+        <div v-if="!loading">
+            <form v-on:submit.prevent>
+                <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
+                <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
+
+                <input-text :name="'Email'" v-model="user.email" :placeholder="'Email'"></input-text>
+                <div v-if="!loading_roles" class="form-group">
+                    <label>Roles:</label>
+                    <select multiple class="form-control" v-model="roles_ids">
+                        <option v-for="role in roles" :value="role.id">{{ role.display_name }}</option>
+                    </select>
+                </div>
+
+                <spinner-button :condition="sending" :submit="submit"></spinner-button>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -37,7 +35,7 @@ export default {
         }
     },
     watch: {
-        user: function (user) {
+        user: function(user) {
             var array = [];
             user.roles.forEach(function(role) {
                 array.push(role.id);
@@ -93,21 +91,21 @@ export default {
             const th = this;
             this.sending = true
             axios.put('/users/' + this.id, data)
-            .then(function (response) {
-                th.sending = false;
-                th.success += 'Data updated.'
-            })
-            .catch(function (error) {
-                let r = error.response.data;
+                .then(function(response) {
+                    th.sending = false;
+                    th.success += 'Data updated.'
+                })
+                .catch(function(error) {
+                    let r = error.response.data;
 
-                if(r.errors) {
-                    th.error += r.errors.email ? r.errors.email + ' ' : '';
-                } else {
-                    th.error += 'Fatal error. '
-                    th.error += r.message ? r.message + ' ' : '';
-                }
-                th.sending = false;
-            });
+                    if (r.errors) {
+                        th.error += r.errors.email ? r.errors.email + ' ' : '';
+                    } else {
+                        th.error += 'Fatal error. '
+                        th.error += r.message ? r.message + ' ' : '';
+                    }
+                    th.sending = false;
+                });
         },
         clearNotifications() {
             this.success = '';
