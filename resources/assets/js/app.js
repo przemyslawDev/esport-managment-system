@@ -15,6 +15,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('pagination', require('./components/Pagination.vue'));
 
 Vue.component('dashboard', require('./views/Dashboard.vue'));
 Vue.component('users', require('./views/users/Users.vue'));

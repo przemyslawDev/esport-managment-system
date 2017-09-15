@@ -38,6 +38,7 @@
                             </td>
                         </tr>
                     </tbody>
+                    <pagination :info="pagination" :data="getData"></pagination>
                 </table>
             </div>
         </div>
@@ -51,19 +52,29 @@ export default {
             success: '',
             error: '',
             employees: null,
-            loading: false
+            loading: false,
+            pagination: {
+                current_page: null,
+                total: null,
+                per_page: null,
+                last_page: null,
+            }
         }
     },
     mounted() {
         this.getData();
     },
     methods: {
-        getData() {
+        getData(page = 1) {
             const th = this;
             this.loading = true;
-            axios.get('/administration/employees/get/all')
+            axios.get('/administration/employees/get/all?page=' + page)
                 .then(function(response) {
-                    th.employees = response.data;
+                    th.employees = response.data.data;
+                    th.pagination.total = response.data.total;
+                    th.pagination.per_page = response.data.per_page;
+                    th.pagination.last_page = response.data.last_page;
+                    th.pagination.current_page = response.data.current_page;
                     th.loading = false;
                 })
                 .catch(function(error) {
