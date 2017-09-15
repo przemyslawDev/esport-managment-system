@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function getAll()
     {
-        $users = User::with('roles')->paginate(1);
+        $users = User::with('roles')->paginate();
 
         return response()->json($users);
     }

@@ -1,46 +1,46 @@
 <template>
-    <div class="text-center" v-if="loading">
-        <i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
-    </div>
-    <div v-else>
-        <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
-        <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-        <div v-else>
-            <a class="btn btn-primary btn-sm" href="users/create">Create</a>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Roles</tH>
-                            <th>Active</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in users">
-                            <td>{{ user.email }}</td>
-                            <td>
-                                <span style="margin-right: 10px;" v-for="role in user.roles">
-                                    {{ role.display_name }} 
-                                </span>
-                            </td>
-                            <td>{{ user.active }}</td>
-                            <td>
-                                <div class="">
-                                    <a :href="'users/' + user.id" type="button" class="btn btn-info btn-sm">View</a>
-                                    <a :href="'users/' + user.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
-                                    <a v-on:click="deleteUser(user.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
-                                    <a v-on:click="activateUser(user.id, user.active)" type="button" class="btn btn-primary btn-sm">
-                                        {{ (user.active ? 'Deactivate' : 'Activate') }}
-                                    </a>
-                                    <a v-on:click="resetPassword(user.id)" type="button" class="btn btn-warning btn-sm">Reset Password</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <pagination :info="pagination" :data="getData"></pagination>
-                </table>
+    <div>
+        <spinner :condition="loading"></spinner>
+        <div v-if="!loading">
+            <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
+            <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
+            <div v-else>
+                <a class="btn btn-primary btn-sm" href="users/create">Create</a>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Roles</tH>
+                                <th>Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in users">
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span style="margin-right: 10px;" v-for="role in user.roles">
+                                        {{ role.display_name }}
+                                    </span>
+                                </td>
+                                <td>{{ user.active }}</td>
+                                <td>
+                                    <div class="">
+                                        <a :href="'users/' + user.id" type="button" class="btn btn-info btn-sm">View</a>
+                                        <a :href="'users/' + user.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
+                                        <a v-on:click="deleteUser(user.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
+                                        <a v-on:click="activateUser(user.id, user.active)" type="button" class="btn btn-primary btn-sm">
+                                            {{ (user.active ? 'Deactivate' : 'Activate') }}
+                                        </a>
+                                        <a v-on:click="resetPassword(user.id)" type="button" class="btn btn-warning btn-sm">Reset Password</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <pagination :info="pagination" :data="getData"></pagination>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@ export default {
             axios.get('/users/activate/' + id)
                 .then(function(response) {
                     th.getData();
-                    if(status) {
+                    if (status) {
                         th.success += 'The user has been deactivated.';
                     } else {
                         th.success += 'The user has been activated.';
