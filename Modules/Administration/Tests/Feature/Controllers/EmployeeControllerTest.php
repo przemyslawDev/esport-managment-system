@@ -37,8 +37,7 @@ class EmployeeControllerTest extends TestCase
             ->assertStatus(200)
             ->decodeResponseJson();
 
-        $response_count = count($response);
-        $this->assertEquals($count, $response_count);
+        $this->assertEquals($count, $response['total']);
     }
 
     /** @test */

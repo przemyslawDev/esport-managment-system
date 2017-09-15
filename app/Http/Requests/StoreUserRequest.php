@@ -31,7 +31,7 @@ class StoreUserRequest extends FormRequest
 
             'firstname' => 'required_unless:type,none|min:2|max:255',
             'lastname' => 'required_unless:type,none|min:2|max:255',
-            'office' => 'required_unless:type,none|min:2"max:255',
+            'office' => 'required_unless:type,none|min:2|max:255',
             'birthdate' => 'required_unless:type,none|date|before:tomorrow'
         ];
     }

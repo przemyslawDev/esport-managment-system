@@ -1,9 +1,9 @@
 <?php
 
-Route::middleware('auth')->group(function () {
 
-    Route::group(['middleware' => 'web', 'prefix' => 'administration', 'namespace' => 'Modules\Administration\Http\Controllers'], function()
-    {
+Route::group(['middleware' => 'web', 'prefix' => 'administration', 'namespace' => 'Modules\Administration\Http\Controllers'], function()
+{
+    Route::middleware('auth')->group(function () {
         Route::prefix('employees')->middleware('role:system_admin|admin')->group(function () {
             Route::get('/', 'EmployeeController@index')->name('administration.employees.index');
             Route::get('/create', 'EmployeeController@create')->name('administration.employees.create');
@@ -18,3 +18,4 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+

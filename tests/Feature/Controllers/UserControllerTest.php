@@ -45,8 +45,7 @@ class UserControllerTest extends TestCase
         $response = $this->json('get', '/users/get/all')
             ->assertStatus(200)->decodeResponseJson();
 
-        $response_count = count($response);
-        $this->assertEquals($count, $response_count);
+        $this->assertEquals($count, $response['total']);
     }
 
     /** @test */

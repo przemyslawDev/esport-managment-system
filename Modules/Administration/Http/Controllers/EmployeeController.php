@@ -22,7 +22,7 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
-        $employees = Employee::with('user')->get();
+        $employees = Employee::with('user')->paginate();
 
         return response()->json($employees);
     }
