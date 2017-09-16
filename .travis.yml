@@ -1,3 +1,4 @@
+sudo: required
 language: php
 
 php:
@@ -13,7 +14,7 @@ before_script:
   - npm install 
   - npm rebuild node-sass
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-  - php artisan serve
+  - php artisan serve &
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
