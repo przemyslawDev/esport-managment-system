@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'roles' => 'required|array',
-            'type' => 'required',
+            'type' => 'required|in:none,employee',
 
             'firstname' => 'required_unless:type,none|min:2|max:255',
             'lastname' => 'required_unless:type,none|min:2|max:255',
