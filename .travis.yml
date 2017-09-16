@@ -27,9 +27,26 @@ install:
    - npm rebuild node-sass
 
 before_script:
-   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1:8000 &
    - php artisan serve &
 
 script:
    - npm run prod
+   - composer dump-autoload
+   - mkdir -p build/logs
+   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
    - php artisan dusk
+
+after_script:
+   - php vendor/bin/coveralls -v
+
+after_success:
+   - travis_retry php vendor/bin/coveralls
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+    
+env:
+  - TRAVIS_NODE_VERSION="4"
