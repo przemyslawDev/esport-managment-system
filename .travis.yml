@@ -1,50 +1,16 @@
-sudo: true
+sudo: required
 dist: trusty
-language: php
-
-php:
-  - 7.0
-
-before_script:
-  - cp .env.travis .env
-  - composer self-update
-  - composer install --no-interaction --ignore-platform-reqs --no-suggest
-  - php artisan key:generate
-  - php artisan migrate:refresh
-  - rm -rf node_modules
-  - npm install 
-  - npm rebuild node-sass
-  - google-chrome-stable --headless --disable-gpu http://localhost &
-  - php artisan serve &
-
-before_install:
-  - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
-  - psql -c "CREATE SCHEMA esport_test;" -U postgres
-  - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
-  
-script:
-  - npm run prod
-  - composer dump-autoload
-  - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-  - php artisan dusk
-
-after_script:
- - php vendor/bin/coveralls -v
-
-after_success:
-  - travis_retry php vendor/bin/coveralls
-
-services:
-  - postgresql
 
 addons:
-  chrome: stable
+   chrome: stable
 
-cache:
-  directories:
-    - node_modules
-    - vendor
-    
-env:
-  - TRAVIS_NODE_VERSION="4"
+install:
+   - cp .env.testing .env
+   - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+before_script:
+   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+   - php artisan serve &
+
+script:
+   - php artisan dusk
