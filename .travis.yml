@@ -1,4 +1,4 @@
-sudo: required
+sudo: true
 dist: trusty
 language: php
 
@@ -14,7 +14,7 @@ before_script:
   - rm -rf node_modules
   - npm install 
   - npm rebuild node-sass
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - google-chrome-stable --headless --disable-gpu http://localhost &
   - php artisan serve &
 
 before_install:
