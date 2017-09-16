@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <label>{{ name }}</label>
-        <input class="form-control" v-model="value" :placeholder="placeholder" @input="$emit('input', $event.target.value)">
+        <input class="form-control" :value="value" :placeholder="placeholder" @input="$emit('input', $event.target.value)">
     </div>
 </template>
 

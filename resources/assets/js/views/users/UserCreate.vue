@@ -100,11 +100,14 @@ export default {
                 password: this.user.password,
                 roles: this.user.roles,
                 type: this.user.type,
-                firstname: this.user.employee.firstname,
-                lastname: this.user.employee.lastname,
-                office: this.user.employee.office,
-                birthdate: this.user.employee.birthdate
             }
+            if(this.user.type === 'employee') {
+                data.firstname = this.user.employee.firstname;
+                data.lastname = this.user.employee.lastname;
+                data.office = this.user.employee.office;
+                data.birthdate = this.user.employee.birthdate;
+            }
+            
             this.makeRequest(data);
         },
         makeRequest(data) {
