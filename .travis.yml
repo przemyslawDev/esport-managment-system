@@ -6,12 +6,14 @@ php:
 before_script:
   - cp .env.travis .env
   - composer self-update
-  - composer install --no-interaction --ignore-platform-reqs
+  - composer install --no-interaction --ignore-platform-reqs --no-suggest
   - php artisan key:generate
   - php artisan migrate:refresh
   - rm -rf node_modules
   - npm install 
   - npm rebuild node-sass
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - php artisan serve &
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
@@ -23,6 +25,7 @@ script:
   - composer dump-autoload
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - php artisan dusk
 
 after_script:
  - php vendor/bin/coveralls -v
@@ -32,6 +35,9 @@ after_success:
 
 services:
   - postgresql
+
+addons:
+  chrome: stable
 
 cache:
   directories:
