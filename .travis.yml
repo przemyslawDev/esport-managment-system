@@ -1,37 +1,47 @@
+sudo: required
+dist: trusty
 language: php
 
 php:
-  - 7.0
+  - '7.0'
 
-before_script:
-  - cp .env.travis .env
-  - composer self-update
-  - composer install --no-interaction --ignore-platform-reqs
-  - php artisan key:generate
-  - php artisan migrate:refresh
-  - rm -rf node_modules
-  - npm install 
-  - npm rebuild node-sass
+services:
+  - postgresql
+
+addons:
+   chrome: stable
 
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
   - psql -c "CREATE SCHEMA esport_test;" -U postgres
   - psql -c "GRANT ALL ON SCHEMA esport_test TO homestead;" -U postgres
-  
+
+install:
+   - cp .env.travis .env
+   - composer self-update
+   - composer install --no-interaction --ignore-platform-reqs --no-suggest
+   - php artisan key:generate
+   - php artisan migrate:refresh
+   - rm -rf node_modules
+   - npm install 
+   - npm rebuild node-sass
+
+before_script:
+   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1:8000 &
+   - php artisan serve &
+
 script:
-  - npm run prod
-  - composer dump-autoload
-  - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+   - npm run prod
+   - composer dump-autoload
+   - mkdir -p build/logs
+   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+   - php artisan dusk
 
 after_script:
- - php vendor/bin/coveralls -v
+   - php vendor/bin/coveralls -v
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
-
-services:
-  - postgresql
+   - travis_retry php vendor/bin/coveralls
 
 cache:
   directories:
