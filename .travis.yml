@@ -6,7 +6,7 @@ addons:
 
 install:
    - cp .env.travis .env
-   - travis_retry composer install --no-interaction --prefer-dist -ignore-platform-reqs --no-suggest
+   - travis_retry composer install --no-interaction --prefer-dist --ignore-platform-reqs --no-suggest
 
 before_script:
    - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
