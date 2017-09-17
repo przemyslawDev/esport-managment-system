@@ -15,7 +15,7 @@ class DashboardControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $this->get('/dashboard')->assertStatus(200);
+        $this->get('/dashboard')->assertSuccessful()->assertViewIs('dashboard');
     }
 
     /** @test */
