@@ -17,7 +17,8 @@ class EmployeeControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $this->get('/administration/employees')->assertStatus(200);
+        $this->get('/administration/employees')->assertSuccessful()
+            ->assertViewIs('administration::employees.index');
     }
 
     /** @test */
@@ -34,7 +35,7 @@ class EmployeeControllerTest extends TestCase
         $count = Employee::count();
 
         $response = $this->json('get', '/administration/employees/get/all')
-            ->assertStatus(200)
+            ->assertSuccessful()
             ->decodeResponseJson();
 
         $this->assertEquals($count, $response['total']);
@@ -52,7 +53,8 @@ class EmployeeControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $this->get('/administration/employees/create')->assertStatus(200);
+        $this->get('/administration/employees/create')->assertSuccessful()
+            ->assertViewIs('administration::employees.create');
     }
 
     /** @test */
@@ -70,7 +72,8 @@ class EmployeeControllerTest extends TestCase
             ->create(['user_id' => $auth->id]);
 
         $this->get('/administration/employees/' . $employee->id)
-            ->assertStatus(200);
+            ->assertSuccessful(200)->assertViewIs('administration::employees.show')
+            ->assertViewHas('id', $employee->id);
     }
 
     /** @test */
@@ -90,7 +93,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
 
         $response = $this->json('get', '/administration/employees/employee/' . $employee->id)
-            ->assertStatus(200)->decodeResponseJson();
+            ->assertSuccessful()->decodeResponseJson();
 
         $this->assertNotEmpty($response);
     }
@@ -117,7 +120,7 @@ class EmployeeControllerTest extends TestCase
         ];
 
         $this->json('post', '/administration/employees', $data)
-            ->assertStatus(200);
+            ->assertSuccessful();
 
         $this->assertDatabaseHas('employees', $data);
     }
@@ -188,7 +191,8 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
 
         $this->get('/administration/employees' . '/' . $employee->id . '/edit')
-            ->assertStatus(200);
+            ->assertSuccessful()->assertViewIs('administration::employees.edit')
+            ->assertViewHas('id', $employee->id);
     }
 
     /** @test */
@@ -215,7 +219,7 @@ class EmployeeControllerTest extends TestCase
         ];
 
         $this->json('put', '/administration/employees' . '/' . $employee->id, $data)
-            ->assertStatus(200);
+            ->assertSuccessful();
 
         $this->assertDatabaseHas('employees', $data);
     }
@@ -290,7 +294,7 @@ class EmployeeControllerTest extends TestCase
         $employee = factory(Employee::class)->create();
 
         $this->json('delete', '/administration/employees' . '/' . $employee->id)
-            ->assertStatus(200);
+            ->assertSuccessful();
 
         $this->assertDatabaseMissing('employees', [
             'id' => $employee->id,

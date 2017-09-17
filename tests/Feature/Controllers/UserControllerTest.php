@@ -18,7 +18,7 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $this->get('/users')->assertStatus(200);
+        $this->get('/users')->assertSuccessful()->assertViewIs('users.index');
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class UserControllerTest extends TestCase
         $count = User::count();
 
         $response = $this->json('get', '/users/get/all')
-            ->assertStatus(200)->decodeResponseJson();
+            ->assertSuccessful()->decodeResponseJson();
 
         $this->assertEquals($count, $response['total']);
     }
@@ -67,7 +67,7 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $this->get('users/create')->assertStatus(200);
+        $this->get('users/create')->assertSuccessful()->assertViewIs('users.create');
     }
 
     /** @test */
@@ -91,7 +91,8 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
     
-        $this->get('/users' . '/' . $user->id)->assertStatus(200);
+        $this->get('/users' . '/' . $user->id)->assertSuccessful()
+            ->assertViewIs('users.show')->assertViewHas('id', $user->id);
     }
 
     /** @test */
@@ -120,7 +121,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('get', '/users/user' . '/' . $user->id)
-            ->assertStatus(200)->decodeResponseJson();
+            ->assertSuccessful()->decodeResponseJson();
 
         $this->assertNotEmpty($response);
     }
@@ -157,7 +158,7 @@ class UserControllerTest extends TestCase
             'type' => 'none'
         ];
 
-        $this->json('post', '/users', $data)->assertStatus(200);
+        $this->json('post', '/users', $data)->assertSuccessful();
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com'
@@ -187,7 +188,7 @@ class UserControllerTest extends TestCase
             'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ];
 
-        $this->json('post', '/users', $data)->assertStatus(200);
+        $this->json('post', '/users', $data)->assertSuccessful();
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com'
@@ -373,7 +374,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->get('/users' . '/' . $user->id . '/edit')
-            ->assertStatus(200);
+            ->assertSuccessful()->assertViewIs('users.edit')->assertViewHas('id', $user->id);
     }
     
     /** @test */
@@ -409,7 +410,7 @@ class UserControllerTest extends TestCase
         ];
 
         $this->json('put', '/users' . '/' . $user->id, $data)
-            ->assertStatus(200);
+            ->assertSuccessful(200);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -482,7 +483,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->json('delete', '/users' . '/' . $user->id)
-            ->assertStatus(200);
+            ->assertSuccessful();
 
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
@@ -518,7 +519,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create(['active' => false]);
 
         $this->json('get', '/users/activate' . '/' . $user->id)
-            ->assertStatus(200);
+            ->assertSuccessful();
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -555,7 +556,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->json('get', '/users/password/reset' . '/' . $user->id)
-            ->assertStatus(200)->decodeResponseJson();
+            ->assertSuccessful()->decodeResponseJson();
 
         $this->assertNotEmpty($response);
     }

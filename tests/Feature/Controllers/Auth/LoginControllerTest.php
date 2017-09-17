@@ -15,7 +15,7 @@ class LoginControllerTest extends TestCase
     /** @test */
     public function showLoginForm_response_success_test()
     {
-        $this->get('/')->assertStatus(200);
+        $this->get('/')->assertSuccessful()->assertViewIs('auth.login');
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $this->post('/login', $data)->assertStatus(302);
+        $this->post('/login', $data)->assertRedirect('/dashboard');
   
         $this->assertEquals(Auth::id(), $user->id);
         $this->assertTrue(Auth::user()->hasRole('admin'));
@@ -60,7 +60,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $this->post('/login', $data)->assertStatus(302);
+        $this->post('/login', $data)->assertRedirect('/dashboard');
   
         $this->assertEquals(Auth::id(), $user->id);
         $this->assertTrue(Auth::user()->hasRole('system_admin'));
@@ -80,7 +80,7 @@ class LoginControllerTest extends TestCase
             'password' => 'test123'
         ];
 
-        $this->post('/login', $data)->assertStatus(302);
+        $this->post('/login', $data)->assertRedirect('/');
 
         $this->assertFalse(Auth::check());
     }
@@ -94,7 +94,7 @@ class LoginControllerTest extends TestCase
 
         $this->assertTrue(Auth::check());
 
-        $this->get('/logout')->assertStatus(302)->assertRedirect('/');
+        $this->get('/logout')->assertRedirect('/');
 
         $this->assertFalse(Auth::check());
     }
