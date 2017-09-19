@@ -30,6 +30,17 @@
         </testsuite>
     </testsuites>
 
+    <!-- Team Managment Module Tests -->
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./Modules/TeamManagment/Tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./Modules/TeamManagment/Tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>
