@@ -11,7 +11,7 @@
                 <input-text :name="'Office'" v-model="employee.office" :placeholder="'Office'"></input-text>
                 <div class="form-group">
                     <label>Birthdate</label>
-                    <datepicker v-model="employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" 
+                    <datepicker :name="'birthdate'" v-model="employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" 
                     :calendar-button="true" :calendar-button-icon="'fa fa-calendar'"></datepicker>
                 </div>
 
@@ -58,7 +58,7 @@ export default {
                 firstname: this.employee.firstname,
                 lastname: this.employee.lastname,
                 office: this.employee.office,
-                birthdate: this.employee.birthdate,
+                birthdate: (this.employee.birthdate ? this.employee.birthdate : '01-01-1990')
             }
             this.makeRequest(data);
         },

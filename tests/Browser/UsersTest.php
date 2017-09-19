@@ -19,11 +19,6 @@ class UsersTest extends DuskTestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A Dusk test example.
-     *
-     * @return void
-     */
     public function test_users_view_create_edit_delete()
     {
         $user = User::where('email', 'admin@example.com')->first();
@@ -32,7 +27,7 @@ class UsersTest extends DuskTestCase
             $browser->loginAs($user)
                     ->visit(new DashboardPage)
                     ->clickLink('Users')
-                    ->on(new UsersPage($browser))
+                    ->on(new UsersPage)
                     ->waitForLink('Create')
                     ->clickLink('Create')
                     ->on(new UserCreatePage)
@@ -52,8 +47,8 @@ class UsersTest extends DuskTestCase
                 ->assertSee('Users');
 
             $created_user = User::where('email', 'test@example.com')->first();
-            $browser->waitFor('table')->
-                with('table', function ($table) use ($created_user) {
+            $browser->waitFor('table')
+                ->with('table', function ($table) use ($created_user) {
                     $table->assertSee($created_user->email)
                         ->click('a[href="users/' . $created_user->id . '/edit"]');
                 });
@@ -112,8 +107,6 @@ class UsersTest extends DuskTestCase
             });
 
             $browser->on(new UserViewPage($updated_user))
-                ->waitFor('table')
-                ->assertSee($updated_user->email)
                 ->clickLink('Users')
                 ->on(new UsersPage)
                 ->assertSee('Users');
