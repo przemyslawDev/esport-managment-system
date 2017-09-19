@@ -28,7 +28,7 @@ class EmployeesTest extends DuskTestCase
                 ->visit(new DashboardPage)
                 ->clickLink('Employees')
                 ->on(new EmployeesPage)
-                ->waitForLink('Create')
+                ->waitFor('table')
                 ->clickLink('Create')
                 ->on(new EmployeeCreatePage)
                 ->waitFor('form')

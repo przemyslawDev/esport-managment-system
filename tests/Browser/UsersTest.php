@@ -25,19 +25,19 @@ class UsersTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit(new DashboardPage)
-                    ->clickLink('Users')
-                    ->on(new UsersPage)
-                    ->waitForLink('Create')
-                    ->clickLink('Create')
-                    ->on(new UserCreatePage)
-                    ->waitFor('form')
-                    ->select('type', 'none')
-                    ->type('email', 'test@example.com')
-                    ->type('password', 'secret')
-                    ->waitFor('select[name=roles]')
-                    ->select('roles', '2')
-                    ->script('window.scrollTo(0, 100);');
+                ->visit(new DashboardPage)
+                ->clickLink('Users')
+                ->on(new UsersPage)
+                ->waitFor('table')
+                ->clickLink('Create')
+                ->on(new UserCreatePage)
+                ->waitFor('form')
+                ->select('type', 'none')
+                ->type('email', 'test@example.com')
+                ->type('password', 'secret')
+                ->waitFor('select[name=roles]')
+                ->select('roles', '2')
+                ->script('window.scrollTo(0, 100);');
             
             $browser->press('Submit')
                 ->waitFor('.alert')
