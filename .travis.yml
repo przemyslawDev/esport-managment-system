@@ -8,9 +8,6 @@ php:
 services:
   - postgresql
 
-addons:
-   chrome: stable
-
 before_install:
   - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
   - psql -c "CREATE SCHEMA esport_test;" -U postgres
@@ -27,7 +24,7 @@ install:
    - npm rebuild node-sass
 
 before_script:
-   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1:8000 &
+   - ./vendor/laravel/dusk/bin/chromedriver-linux &
    - php artisan serve &
 
 script:
