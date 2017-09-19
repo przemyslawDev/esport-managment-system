@@ -1,12 +1,19 @@
 <?php
 
-namespace Tests\Browser\Pages;
+namespace Tests\Browser\Pages\Users;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
+use App\User;
 
-class UsersPage extends BasePage
+class UserViewPage extends BasePage
 {
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
     /**
      * Get the URL for the page.
      *
@@ -14,7 +21,7 @@ class UsersPage extends BasePage
      */
     public function url()
     {
-        return '/users';
+        return '/users' . '/' . $this->user->id;
     }
 
     /**

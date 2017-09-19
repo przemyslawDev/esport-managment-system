@@ -9,7 +9,7 @@
                 <input-text :name="'Email'" v-model="user.email" :placeholder="'Email'"></input-text>
                 <div v-if="!loading_roles" class="form-group">
                     <label>Roles:</label>
-                    <select multiple class="form-control" v-model="roles_ids">
+                    <select name="roles" multiple class="form-control" v-model="roles_ids">
                         <option v-for="role in roles" :value="role.id">{{ role.display_name }}</option>
                     </select>
                 </div>

@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <label>Type</label>
-                <select class="form-control" v-model="user.type">
+                <select name="type" class="form-control" v-model="user.type">
                     <option v-for="option in typeOptions" :value="option.value">{{ option.text }}</option>
                 </select>
             </div>
@@ -15,11 +15,11 @@
             <input-text :name="'Email'" v-model="user.email" :placeholder="'Email'"></input-text>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" v-model="user.password">
+                <input name="password" type="password" class="form-control" v-model="user.password">
             </div>
             <div v-if="!loading_roles" class="form-group">
                 <label>Roles:</label>
-                <select multiple class="form-control" v-model="user.roles">
+                <select name="roles" multiple class="form-control" v-model="user.roles">
                     <option v-for="role in roles" :value="role.id">{{ role.display_name }}</option>
                 </select>
             </div>
@@ -31,7 +31,7 @@
                 <input-text :name="'Office'" v-model="user.employee.office" :placeholder="'Office'"></input-text>
                 <div class="form-group">
                     <label>Birthdate</label>
-                    <datepicker v-model="user.employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" 
+                    <datepicker name="birthdate" v-model="user.employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" 
                     :calendar-button="true" :calendar-button-icon="'fa fa-calendar'"></datepicker>
                 </div>
             </template>

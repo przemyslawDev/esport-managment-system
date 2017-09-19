@@ -1,12 +1,20 @@
 <?php
 
-namespace Tests\Browser\Pages;
+namespace Tests\Browser\Pages\Users;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
+use App\User;
 
-class DashboardPage extends BasePage
+class UserEditPage extends BasePage
 {
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Get the URL for the page.
      *
@@ -14,7 +22,7 @@ class DashboardPage extends BasePage
      */
     public function url()
     {
-        return '/dashboard';
+        return '/users' . '/' . $this->user->id . '/edit';
     }
 
     /**
@@ -26,7 +34,12 @@ class DashboardPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url())
-            ->assertSee('Dashboard');
+            ->waitFor('form')
+            ->assertSee('Edit User')
+            ->assertInputValue('email', $this->user->email);
+            foreach($this->user->roles() as $role) {
+                $browser->assertSelected('roles', $role->id);
+            }
     }
 
     /**
