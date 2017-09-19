@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Browser\Pages;
+namespace Tests\Browser\Pages\Users;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
-class DashboardPage extends BasePage
+class UserCreatePage extends BasePage
 {
     /**
      * Get the URL for the page.
@@ -14,7 +14,7 @@ class DashboardPage extends BasePage
      */
     public function url()
     {
-        return '/dashboard';
+        return '/users/create';
     }
 
     /**
@@ -26,7 +26,7 @@ class DashboardPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url())
-            ->assertSee('Dashboard');
+            ->assertSee('Create User');
     }
 
     /**

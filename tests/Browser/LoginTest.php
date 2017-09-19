@@ -29,7 +29,7 @@ class LoginTest extends DuskTestCase
                     ->assertSee('Please Sign In')
                     ->type('email', str_random(10) . '@example.com')
                     ->type('password', 'secret')
-                    ->click('button')
+                    ->press('Login')
                     ->assertSee('These credentials do not match our records.');
         });
     }
@@ -43,8 +43,7 @@ class LoginTest extends DuskTestCase
                     ->type('password', 'secret')
                     ->press('Login')
                     ->assertPathIs('/dashboard')
-                    ->on(new DashboardPage)
-                    ->assertSee('Dashboard');
+                    ->on(new DashboardPage);
         });
     }
 }
