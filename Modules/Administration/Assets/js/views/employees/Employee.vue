@@ -16,7 +16,8 @@
                                 <tbody>
                                     <tr>
                                         <td>Email</td>
-                                        <td>{{ employee.user.email }}</td>
+                                        <td v-if="employee.user">{{ employee.user.email }}</td>
+                                        <td v-else></td>
                                     </tr>
 
                                     <tr>

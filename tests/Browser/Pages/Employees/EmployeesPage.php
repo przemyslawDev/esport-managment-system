@@ -1,19 +1,12 @@
 <?php
 
-namespace Tests\Browser\Pages\Users;
+namespace Tests\Browser\Pages\Employees;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
-use App\User;
 
-class UserViewPage extends BasePage
+class EmployeesPage extends BasePage
 {
-    protected $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
     /**
      * Get the URL for the page.
      *
@@ -21,7 +14,7 @@ class UserViewPage extends BasePage
      */
     public function url()
     {
-        return '/users' . '/' . $this->user->id;
+        return '/administration/employees';
     }
 
     /**
@@ -32,9 +25,7 @@ class UserViewPage extends BasePage
      */
     public function assert(Browser $browser)
     {
-        $browser->assertPathIs($this->url())
-            ->waitFor('table')
-            ->assertSee($this->user->email);
+        $browser->assertPathIs($this->url());
     }
 
     /**
