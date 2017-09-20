@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' => 'Modules\TeamManagment\Http\Controllers'], function()
+Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' => 'Modules\Teammanagment\Http\Controllers'], function()
 {
     Route::middleware('auth')->group(function () {
         Route::prefix('games')->middleware('role:system_admin')->group(function () {
