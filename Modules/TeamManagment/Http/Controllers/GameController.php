@@ -14,6 +14,13 @@ class GameController extends Controller
         return view('teammanagment::games.index');
     }
 
+    public function getAll()
+    {
+        $games = Game::paginate();
+
+        return response()->json($games);
+    }
+
     public function show($id)
     {
         return view('teammanagment::games.show')->with('id', $id);

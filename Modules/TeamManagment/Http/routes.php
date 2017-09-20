@@ -8,6 +8,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' =>
             Route::get('/{id}', 'GameController@show')->name('teammanagment.games.show');
 
             Route::get('/game/{id}', 'GameController@get')->name('teammanagment.games.get');
+            Route::get('/get/all', 'GameController@getAll')->name('teammanagment.games.get-all');            
         });
     });
 });
