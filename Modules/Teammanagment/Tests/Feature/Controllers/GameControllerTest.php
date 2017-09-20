@@ -34,6 +34,35 @@ class GameControllerTest extends TestCase
     }
 
     /** @test */
+    public function getAll_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $count = Game::count();
+
+        $response = $this->json('get', '/teammanagment/games/get/all')
+            ->assertSuccessful()->decodeResponseJson();
+
+        $this->assertEquals($count, $response['total']);
+    }
+
+    /** @test */
+    public function getAll_as_administrator_response_permission_error_test()
+    {
+        $this->createAdmin();
+        
+        $this->json('get', '/teammanagment/games/get/all')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function getAll_as_guest_response_permission_error_test()
+    {
+        $this->json('get', '/teammanagment/games/get/all')
+            ->assertStatus(401);
+    }
+
+    /** @test */
     public function show_reponse_success_test()
     {
         $this->createSystemAdmin();

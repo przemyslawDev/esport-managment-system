@@ -32,7 +32,7 @@ Vue.component('user-edit', require('./views/users/UserEdit.vue'));
 require('../../../Modules/Administration/Assets/js/app');
 
 //Team Managment module components
-//require('../../../Modules/Teammanagment/Assets/js/app');
+require('../../../Modules/Teammanagment/Assets/js/app');
 
 const app = new Vue({
     el: '#app'
