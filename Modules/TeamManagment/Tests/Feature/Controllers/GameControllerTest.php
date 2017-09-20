@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\TeamManagment\Tests\Feature\Controllers;
+namespace Modules\Teammanagment\Tests\Feature\Controllers;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\TeamManagment\Models\Game;
+use Modules\Teammanagment\Models\Game;
 
 class GameControllerTest extends TestCase
 {
@@ -38,7 +38,7 @@ class GameControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
 
         $this->get('/teammanagment/games' . '/' . $game->id)->assertSuccessful()
             ->assertViewIs('teammanagment::games.show')->assertViewHas('id', $game->id);
@@ -49,7 +49,7 @@ class GameControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
 
         $this->get('/teammanagment/games' . '/' . $game->id)->assertRedirect('/403');
     }
@@ -57,7 +57,7 @@ class GameControllerTest extends TestCase
     /** @test */
     public function show_as_guest_permission_error_test()
     {
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
 
         $this->get('/teammanagment/games' . '/' . $game->id)->assertRedirect('/');
     }   
@@ -67,7 +67,7 @@ class GameControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
 
         $response = $this->json('get', '/teammanagment/games/game' . '/' . $game->id)
             ->assertSuccessful()->decodeResponseJson();
@@ -80,7 +80,7 @@ class GameControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
 
         $this->json('get', '/teammanagment/games/game' . '/' . $game->id)
             ->assertStatus(403);
@@ -89,7 +89,7 @@ class GameControllerTest extends TestCase
     /** @test */
     public function get_as_guest_response_permission_error_test() 
     {   
-        $game = factory('Modules\TeamManagment\Models\Game')->create();
+        $game = factory(Game::class)->create();
         
         $this->json('get', '/teammanagment/games/game' . '/' . $game->id)
             ->assertStatus(401);

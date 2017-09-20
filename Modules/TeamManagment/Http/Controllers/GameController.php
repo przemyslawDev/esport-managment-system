@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\TeamManagment\Http\Controllers;
+namespace Modules\Teammanagment\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Modules\TeamManagment\Models\Game;
+use Modules\Teammanagment\Models\Game;
 
 class GameController extends Controller
 {

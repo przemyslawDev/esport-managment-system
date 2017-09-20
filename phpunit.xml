@@ -33,11 +33,11 @@
     <!-- Team Managment Module Tests -->
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./Modules/TeamManagment/Tests/Unit</directory>
+            <directory suffix="Test.php">./Modules/Teammanagment/Tests/Unit</directory>
         </testsuite>
 
         <testsuite name="Feature">
-            <directory suffix="Test.php">./Modules/TeamManagment/Tests/Feature</directory>
+            <directory suffix="Test.php">./Modules/Teammanagment/Tests/Feature</directory>
         </testsuite>
     </testsuites>
 

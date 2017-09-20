@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TeamManagment\Models;
+namespace Modules\Teammanagment\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Modules\TeamManagment\Models\Game;
+use Modules\Teammanagment\Models\Game;
 
 class AddGames extends Migration
 {

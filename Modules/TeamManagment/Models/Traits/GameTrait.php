@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TeamMangment\Models\Traits;
+namespace Modules\Teammangment\Models\Traits;
 
 trait GameTrait
 {

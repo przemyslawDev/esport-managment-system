@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\TeamManagment\Providers;
+namespace Modules\Teammanagment\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 
-class TeamManagmentServiceProvider extends ServiceProvider
+class TeammanagmentServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
