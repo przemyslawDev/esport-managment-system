@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Modules\TeamManagment\Models\Game;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Modules\TeamManagment\Models\Game::class, function (Faker $faker) {
+$factory->define(Game::class, function (Faker $faker) {
 
     return [
         'name' => $faker->name,
