@@ -1,0 +1,15 @@
+{
+    "name": "przemyslawDev/teammanagment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Przemysław Łapiński",
+            "email": "przemyslaw.lapinski.dev@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Teammanagment\\": ""
+        }
+    }
+}

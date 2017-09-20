@@ -1,0 +1,16 @@
+{
+    "name": "Teammanagment",
+    "alias": "teammanagment",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Teammanagment\\Providers\\TeammanagmentServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
