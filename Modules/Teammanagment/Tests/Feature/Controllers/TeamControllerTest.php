@@ -5,10 +5,22 @@ namespace Modules\Teammanagment\Tests\Feature\Controllers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Teammanagment\Models\Team;
+use Modules\Teammanagment\Models\Game;
 
 class TeamControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function prepareRelatedData() 
+    {
+        $team = factory(Team::class)->create();
+        $game = factory(Game::class)->create();
+
+        return [
+            'game' =>$game, 
+            'team' => $team
+        ];
+    }
 
     /** @test */
     public function index_as_system_admin_response_success_test()
@@ -350,6 +362,82 @@ class TeamControllerTest extends TestCase
         $team = factory(Team::class)->create();
         
         $this->json('delete', '/teammanagment/teams' . '/' . $team->id)
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function attachGame_as_system_admin_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $array = $this->prepareRelatedData();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $array['team']->id . '/games' . '/' . $array['game']->id . '/attach')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('teams_games', [
+            'team_id' => $array['team']->id,
+            'game_id' => $array['game']->id
+        ]);
+    }
+
+    /** @test */
+    public function attachGame_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+
+        $team = factory(Team::class)->create();
+        $game = factory(Game::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/games' . '/' . $game->id . '/attach')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function attachGame_as_guest_response_permission_error_test()
+    {
+        $team = factory(Team::class)->create();
+        $game = factory(Game::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/games' . '/' . $game->id . '/attach')
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function detachGame_as_system_admin_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $array = $this->prepareRelatedData();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $array['team']->id . '/games' . '/' . $array['game']->id . '/detach')
+            ->assertSuccessful();
+
+        $this->assertDatabaseMissing('teams_games', [
+            'team_id' => $array['team']->id,
+            'game_id' => $array['game']->id,
+        ]);
+    }
+
+    /** @test */
+    public function detachGame_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+
+        $team = factory(Team::class)->create();
+        $game = factory(Game::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/games' . '/' . $game->id . '/detach')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function detachGame_as_guest_response_permission_error_test()
+    {
+        $team = factory(Team::class)->create();
+        $game = factory(Game::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/games' . '/' . $game->id . '/detach')
             ->assertStatus(401);
     }
 }
