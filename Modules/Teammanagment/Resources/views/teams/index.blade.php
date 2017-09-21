@@ -7,7 +7,7 @@
                 <h3 class="panel-title">{{ _('Teams') }}</h3>
             </div>
             <div class="panel-body">
-                
+                <teams></teams>
             </div>
         </div>
     </div>

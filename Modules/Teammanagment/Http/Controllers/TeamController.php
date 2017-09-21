@@ -37,7 +37,7 @@ class TeamController extends Controller
         $team->save();
 
         foreach($request->input('games') as $game_id) {
-            $game = Game::find($game_id)->first();
+            $game = Game::find($game_id);
             $team->games()->save($game);
         }
 

@@ -5,7 +5,7 @@
             <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{ user.email }}</h3>
+                    <h3 class="panel-title">{{ team.name }}</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -15,27 +15,21 @@
                             <table class="table table-user-information">
                                 <tbody>
                                     <tr>
-                                        <td>Roles</td>
+                                        <td>Tag</td>
+                                        <td>{{ team.tag }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Games</td>
                                         <td>
-                                            <span style="margin-right: 10px;" v-for="role in user.roles">{{ role.display_name }}</span>
+                                            <span style="margin-right: 10px;" v-for="game in team.games">{{ game.name }}</span>
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td>Active</td>
-                                        <td>{{ user.active }}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Created</td>
-                                        <td>{{ user.created_at }}</td>
-                                    </tr>
-
                                 </tbody>
                             </table>
 
                             <!--<a href="#" class="btn btn-primary">My Sales Performance</a>
-                      <a href="#" class="btn btn-primary">Team Sales Performance</a>-->
+                                <a href="#" class="btn btn-primary">Team Sales Performance</a>-->
                         </div>
                     </div>
                 </div>
@@ -53,7 +47,7 @@ export default {
         return {
             error: '',
             loading: '',
-            user: {}
+            team: {}
         }
     },
     mounted() {
@@ -64,9 +58,9 @@ export default {
         getData() {
             const th = this;
             this.loading = true;
-            axios.get('/users/user/' + this.id)
+            axios.get('/teammanagment/teams/team/' + this.id)
                 .then(function(response) {
-                    th.user = response.data;
+                    th.team = response.data;
                     th.loading = false;
                 })
                 .catch(function(error) {
