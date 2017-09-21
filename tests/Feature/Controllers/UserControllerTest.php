@@ -158,18 +158,19 @@ class UserControllerTest extends TestCase
             'type' => 'none'
         ];
 
-        $this->json('post', '/users', $data)->assertSuccessful();
+        $response = $this->json('post', '/users', $data)->assertSuccessful()
+            ->decodeResponseJson();
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com'
+            'email' => $data['email']
         ]);
 
-        $user = User::where('email', 'test@example.com')->first();
-
-        $this->assertDatabaseHas('role_user', [
-            'user_id' => $user->id,
-            'role_id' => 3
-        ]);
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
     }
 
     /** @test */
@@ -188,24 +189,26 @@ class UserControllerTest extends TestCase
             'birthdate' => Carbon::now()->subYears(20)->toDateString()
         ];
 
-        $this->json('post', '/users', $data)->assertSuccessful();
+        $response = $this->json('post', '/users', $data)->assertSuccessful()
+            ->decodeResponseJson();
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com'
+            'email' => $data['email']
         ]);
 
-        $user = User::where('email', 'test@example.com')->first();
-
-        $this->assertDatabaseHas('role_user', [
-            'user_id' => $user->id,
-            'role_id' => 3
-        ]);
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
 
         $this->assertDatabaseHas('employees', [
-            'user_id' => $user->id,
+            'user_id' => $response['id'],
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
-            'office' => $data['office']
+            'office' => $data['office'],
+            'birthdate' => $data['birthdate']
         ]);
     }
 
@@ -214,17 +217,13 @@ class UserControllerTest extends TestCase
     {
         $this->createAdmin();
 
-        $data = [];
-
-        $this->json('post', '/users', $data)->assertStatus(403);
+        $this->json('post', '/users', [])->assertStatus(403);
     }
 
     /** @test */
     public function store_as_guest_response_permissions_error_test()
     {
-        $data = [];
-
-        $this->json('post', '/users', $data)->assertStatus(401);
+        $this->json('post', '/users', [])->assertStatus(401);
     }
 
     /** @test */
@@ -409,25 +408,22 @@ class UserControllerTest extends TestCase
             'roles' => [2,3]
         ];
 
-        $this->json('put', '/users' . '/' . $user->id, $data)
-            ->assertSuccessful(200);
+        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+            ->assertSuccessful()->decodeResponseJson();
 
         $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'email' => 'test@example.com',
+            'id' => $response['id'],
+            'email' => $data['email'],
             'avatar' => $user->avatar,
-            'active' => 0
+            'active' => false
         ]);
 
-        $this->assertDatabaseHas('role_user', [
-            'user_id' => $user->id,
-            'role_id' => 2
-        ]);
-
-        $this->assertDatabaseHas('role_user', [
-            'user_id' => $user->id,
-            'role_id' => 3
-        ]);
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
     }
 
     /** @test */
@@ -437,9 +433,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $data = [];
-
-        $this->json('put', '/users' . '/' . $user->id, $data)
+        $this->json('put', '/users' . '/' . $user->id, [])
             ->assertStatus(403);
     }
 
@@ -448,9 +442,7 @@ class UserControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $data = [];
-
-        $this->json('put', '/users' . '/' . $user->id, $data)
+        $this->json('put', '/users' . '/' . $user->id, [])
             ->assertStatus(401);
     }
 
