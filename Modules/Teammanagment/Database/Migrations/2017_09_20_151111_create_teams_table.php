@@ -17,7 +17,7 @@ class CreateTeamsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('tag');
-            $table->text('logo');
+            $table->text('logo')->nullable()->default(null);
             $table->timestamps();
         });
 

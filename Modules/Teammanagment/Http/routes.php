@@ -10,5 +10,18 @@ Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' =>
             Route::get('/game/{id}', 'GameController@get')->name('teammanagment.games.get');
             Route::get('/get/all', 'GameController@getAll')->name('teammanagment.games.get-all');            
         });
+        
+        Route::prefix('teams')->middleware('role:system_admin')->group(function () {
+            Route::get('/', 'TeamController@index')->name('teammanagment.teams.index');
+            Route::get('/create', 'TeamController@create')->name('teammanagment.teams.create');
+            Route::get('/{id}', 'TeamController@show')->name('teammanagment.teams.show');
+            Route::post('/', 'TeamController@store')->name('teammanagment.teams.store');
+            Route::get('/{id}/edit', 'TeamController@edit')->name('teammanagment.teams.edit');
+            Route::put('/{id}', 'TeamController@update')->name('teammanagment.teams.update');
+            Route::delete('/{id}', 'TeamController@destroy')->name('teammanagment.teams.delete');
+                
+            Route::get('/team/{id}', 'TeamController@get')->name('teammanagment.teams.get');
+            Route::get('/get/all', 'TeamController@getAll')->name('teammanagment.teams.get-all');
+        });
     });
 });
