@@ -75,4 +75,16 @@ class TeamController extends Controller
     {
         Team::destroy($id);
     }
+
+    public function attachGame($team_id, $game_id)
+    {
+        $team = Team::findOrFail($team_id);
+        $team->games()->attach($game_id);
+    }
+
+    public function detachGame($team_id, $game_id) 
+    {
+        $team = Team::findOrFail($team_id);
+        $team->games()->detach($game_id);
+    }
 }

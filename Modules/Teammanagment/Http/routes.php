@@ -22,6 +22,8 @@ Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' =>
                 
             Route::get('/team/{id}', 'TeamController@get')->name('teammanagment.teams.get');
             Route::get('/get/all', 'TeamController@getAll')->name('teammanagment.teams.get-all');
+            Route::get('/{team_id}/games/{game_id}/attach', 'TeamController@attachGame')->name('teammanagment.teams.attach-game');
+            Route::get('/{team_id}/games/{game_id}/detach', 'TeamController@detachGame')->name('teammanagment.teams.detach-game');            
         });
     });
 });
