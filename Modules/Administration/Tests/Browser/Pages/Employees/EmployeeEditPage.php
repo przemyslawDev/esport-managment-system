@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Browser\Pages\Employees;
+namespace Modules\Administration\Tests\Browser\Pages\Employees;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 use Modules\Administration\Models\Employee;
 
-class EmployeeViewPage extends BasePage
+class EmployeeEditPage extends BasePage
 {
     protected $employee;
 
@@ -21,7 +21,7 @@ class EmployeeViewPage extends BasePage
      */
     public function url()
     {
-        return '/administration/employees' . '/' . $this->employee->id;
+        return '/administration/employees' . '/'. $this->employee->id . '/edit';
     }
 
     /**
@@ -33,8 +33,11 @@ class EmployeeViewPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url())
-            ->waitFor('table')
-            ->assertSee($this->employee->firstname);  
+            ->waitFor('form')
+            ->assertSee('Edit Employee')
+            ->assertInputValue('firstname', $this->employee->firstname)
+            ->assertInputValue('lastname', $this->employee->lastname)
+            ->assertInputValue('office', $this->employee->office);
     }
 
     /**

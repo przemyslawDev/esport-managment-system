@@ -13,6 +13,21 @@
             <directory suffix="Test.php">./tests/Browser</directory>
         </testsuite>
     </testsuites>
+
+    <!-- Administration Module -->
+    <testsuites>
+        <testsuite name="Browser Test Suite">
+            <directory suffix="Test.php">Modules/Administration/Tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- Team Managment Module -->
+    <testsuites>
+        <testsuite name="Browser Test Suite">
+            <directory suffix="Test.php">Modules/Teammanagment/Tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>

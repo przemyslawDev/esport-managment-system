@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Browser\Pages\Employees;
+namespace Modules\Administration\Tests\Browser\Pages\Employees;
 
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
-class EmployeeCreatePage extends BasePage
+class EmployeesPage extends BasePage
 {
     /**
      * Get the URL for the page.
@@ -14,7 +14,7 @@ class EmployeeCreatePage extends BasePage
      */
     public function url()
     {
-        return '/administration/employees/create';
+        return '/administration/employees';
     }
 
     /**
