@@ -1,18 +1,18 @@
 <?php
 
-namespace Tests\Browser;
+namespace Modules\Administration\Tests\Browser;
 
-use Tests\DuskTestCase;
+use Modules\Administration\Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Browser\Pages\DashboardPage;
 use Modules\Administration\Models\Employee;
-use Tests\Browser\Pages\Employees\EmployeesPage;
-use Tests\Browser\Pages\Employees\EmployeeViewPage;
-use Tests\Browser\Pages\Employees\EmployeeEditPage;
-use Tests\Browser\Pages\Employees\EmployeeCreatePage;
+use Modules\Administration\Tests\Browser\Pages\Employees\EmployeesPage;
+use Modules\Administration\Tests\Browser\Pages\Employees\EmployeeViewPage;
+use Modules\Administration\Tests\Browser\Pages\Employees\EmployeeEditPage;
+use Modules\Administration\Tests\Browser\Pages\Employees\EmployeeCreatePage;
 use App\User;
 
 class EmployeesTest extends DuskTestCase
