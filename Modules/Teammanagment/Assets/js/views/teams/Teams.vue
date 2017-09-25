@@ -29,7 +29,7 @@
                                             <i v-if="select != team.id" class="fa fa-plus"></i>
                                             <i v-else class="fa fa-minus"></i>
                                         </button>
-                                        <select v-if="select && select == team.id" name="games" v-model="game" @change="attachGame(team.id, game)" class="form-control">
+                                        <select v-if="games && select && select == team.id" name="game" v-model="game" @change="attachGame(team.id, game)" class="form-control">
                                             <option v-for="game in games" v-if="!teamHasGame(team.games, game.id)" :value="game.id">{{ game.name }}</option>
                                         </select>
                                     </template>
@@ -189,15 +189,6 @@ export default {
 .btn-game {
     margin-left: 2px;
     margin-right: 2px;
-}
-.btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.428571429;
 }
 
 </style>

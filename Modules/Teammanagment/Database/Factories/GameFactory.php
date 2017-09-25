@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(Modules\Teammanagment\Models\Game::class, function (Faker $faker) {
 
     return [
-        'name' => $faker->company,
+        'name' => $faker->name,
         'slug' => $faker->slug,
     ];
 });
