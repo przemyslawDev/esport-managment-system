@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(Modules\Teammanagment\Models\Team::class, function (Faker $faker) {
 
     return [
-        'name' => $faker->name,
+        'name' => $faker->company,
         'tag' => $faker->slug,
         'logo' => $faker->imageUrl()
     ];
