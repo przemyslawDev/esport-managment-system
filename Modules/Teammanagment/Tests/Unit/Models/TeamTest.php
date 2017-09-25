@@ -13,8 +13,8 @@ class TeamTest extends TestCase
     {   
         $team = factory(Team::class)
             ->create()
-            ->each(function ($g) {
-                $g->games()->save(factory(Game::class)->create());
+            ->each(function ($t) {
+                $t->games()->save(factory(Game::class)->create());
             });
 
         $this->assertNotEmpty($team);
