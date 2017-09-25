@@ -21,15 +21,25 @@
                                 <td>{{ team.name }}</td>
                                 <td>{{ team.tag }}</td>
                                 <td>
-                                    <span style="margin-right: 10px;" v-for="game in team.games">
-                                        {{ game.name }}
-                                    </span>
+                                    <button @click="detachGame(team.id, game.id)" type="button" class="btn btn-default btn-game btn-sm" v-for="game in team.games">
+                                        {{ game.name }} <i v-if="canEditStatus" class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                    <template v-if="canEditStatus">
+                                        <button @click="(select == team.id) ? select = null : select = team.id" type="button" class="btn btn-default btn-circle">
+                                            <i v-if="select != team.id" class="fa fa-plus"></i>
+                                            <i v-else class="fa fa-minus"></i>
+                                        </button>
+                                        <select v-if="select && select == team.id" name="games" v-model="game" @change="attachGame(team.id, game)" class="form-control">
+                                            <option v-for="game in games" v-if="!teamHasGame(team.games, game.id)" :value="game.id">{{ game.name }}</option>
+                                        </select>
+                                    </template>
                                 </td>
                                 <td>
                                     <div class="">
                                         <a :href="'teams/' + team.id" type="button" class="btn btn-info btn-sm">View</a>
                                         <a :href="'teams/' + team.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
-                                        <a v-on:click="deleteTeam(team.id)" type="button" class="btn btn-danger btn-sm">Delete</a>                                    </div>
+                                        <a @click="deleteTeam(team.id)" type="button" class="btn btn-danger btn-sm">Delete</a>                                    
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -48,6 +58,9 @@ export default {
             success: '',
             error: '',
             teams: null,
+            select: false,
+            game: null,
+            games: null,
             loading: false,
             pagination: {
                 current_page: null,
@@ -57,13 +70,40 @@ export default {
             }
         }
     },
+    props: {
+        canedit: {
+            type: String, // '1' or '0'
+            default: false,
+            required: true
+        }
+    },
+    computed: {
+        canEditStatus() {
+            return ((this.canedit === '1') ? true : false);
+        }
+    },
     mounted() {
         this.getData();
+        this.getGames();
     },
     methods: {
+         getGames() {
+            const th = this;
+            axios.get('/teammanagment/games/get/all')
+                .then(function(response) {
+                    th.games = response.data.data;
+                })
+                .catch(function(error) {
+                    let r = error.reponse.data;
+                    th.error += 'Fatal error. ';
+                    th.error += r.message ? r.message + ' ' : '';
+                });
+        },
         getData(page = 1) {
             const th = this;
+            this.select = false;
             this.loading = true;
+            
             axios.get('/teammanagment/teams/get/all?page=' + page)
                 .then(function(response) {
                     th.teams = response.data.data;
@@ -80,6 +120,14 @@ export default {
                     th.loading = false;
                 });
         },
+        teamHasGame(team_games, game_id) {
+            for(var i = 0; i < team_games.length; i++) {
+                if (team_games[i].id == game_id) {
+                    return true; 
+                }
+            }
+            return false;
+        },
         deleteTeam(id) {
             this.clearNotifications();
             const th = this;
@@ -94,6 +142,40 @@ export default {
                     th.error += r.message ? r.message + ' ' : '';
                 });
         },
+        attachGame(team_id, game_id) {
+            if(this.canEditStatus) {
+                this.clearNotifications();
+                const th = this;
+
+                axios.get('/teammanagment/teams' + '/' + team_id + '/games' + '/' + game_id + '/attach')
+                    .then(function(response) {
+                        th.getData();
+                        th.success += 'Game attached.'
+                    })
+                    .catch(function(error) {
+                        let r = error.response.data;
+                        th.error += 'Fatal error. ';
+                        th.error += r.message ? r.message + ' ' : '';
+                    });
+            }
+        },
+        detachGame(team_id, game_id) {
+            if(this.canEditStatus) {
+                this.clearNotifications();
+                const th = this;
+
+                axios.get('/teammanagment/teams' + '/' + team_id + '/games' + '/' + game_id + '/detach')
+                    .then(function(response) {
+                        th.getData();
+                        th.success += 'Game detached.'
+                    })
+                    .catch(function(error) {
+                        let r = error.response.data;
+                        th.error += 'Fatal error. ';
+                        th.error += r.message ? r.message + ' ' : '';
+                    });
+            }
+        },
         clearNotifications() {
             this.success = '';
             this.error = '';
@@ -101,3 +183,21 @@ export default {
     }
 }
 </script>
+
+<style lang="css">
+
+.btn-game {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.428571429;
+}
+
+</style>
