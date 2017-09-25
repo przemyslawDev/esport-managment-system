@@ -12,4 +12,9 @@ class Game extends Model
     {
         return $this->belongsToMany('Modules\Teammanagment\Models\Team', 'teams_games', 'game_id', 'team_id');
     } 
+
+    public function managers()
+    {
+        return $this->belongsToMany('Modules\Teammanagment\Models\Manager', 'managers_games', 'game_id', 'manager_id');
+    }
 }

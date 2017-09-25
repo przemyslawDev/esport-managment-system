@@ -3,9 +3,12 @@
 namespace Modules\Administration\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Teammanagment\Models\Traits\ManagerTrait;
 
 class Employee extends Model
 {
+    use ManagerTrait;
+
     protected $guarded = ['user_id'];
 
     public function user() 
