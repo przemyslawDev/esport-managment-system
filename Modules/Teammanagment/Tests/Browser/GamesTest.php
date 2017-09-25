@@ -5,6 +5,7 @@ namespace Modules\Teammanagment\Tests\Browser;
 use Modules\Teammanagment\Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use Tests\Browser\Pages\DashboardPage;
 use Modules\Teammanagment\Tests\Browser\Pages\Games\GamesPage;
@@ -13,6 +14,8 @@ use Modules\Teammanagment\Models\Game;
 
 class GamesTest extends DuskTestCase
 {
+    use RefreshDatabase;
+    
     public function test_games_view()
     {
         $user = User::where('email', 'admin@example.com')->first();

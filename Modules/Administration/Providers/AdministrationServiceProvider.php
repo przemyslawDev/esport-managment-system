@@ -4,6 +4,8 @@ namespace Modules\Administration\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Teammanagment\Observers\TeamObserver;
+use Modules\Teammanagment\Models\Team;
 
 class AdministrationServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,8 @@ class AdministrationServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+
+        $this->registerObservers();
     }
 
     /**
@@ -98,6 +102,11 @@ class AdministrationServiceProvider extends ServiceProvider
         if (! app()->environment('production')) {
             app(Factory::class)->load(__DIR__ . '/../Database/Factories');
         }
+    }
+
+    public function registerObservers()
+    {
+        Team::observe(TeamObserver::class);
     }
 
     /**
