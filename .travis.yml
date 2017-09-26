@@ -25,7 +25,7 @@ install:
 
 before_script:
    - export DISPLAY=:0 
-   - sh -e /etc/init.d/xvfb start
+   #- sh -e /etc/init.d/xvfb start
    - ./vendor/laravel/dusk/bin/chromedriver-linux &
    - php artisan serve &
 

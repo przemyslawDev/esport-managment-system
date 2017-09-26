@@ -40,8 +40,8 @@ class UsersTest extends DuskTestCase
                 ->script('window.scrollTo(0, 100);');
             
             $browser->press('Submit')
-                //->waitFor('.alert')
-                //->assertSee('Data created.')
+                ->waitFor('.alert')
+                ->assertSee('Data created.')
                 ->clickLink('Users')
                 ->on(new UsersPage)
                 ->assertSee('Users');
