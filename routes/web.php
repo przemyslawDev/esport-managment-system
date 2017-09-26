@@ -15,6 +15,8 @@ Route::get('/403', function () {
     return view('403');
 })->name('403');
 
+Route::get('/account/verify/{code}', 'Auth\RegisterController@confirm');
+
 Auth::routes();
 
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');

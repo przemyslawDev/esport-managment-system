@@ -25,6 +25,7 @@ class AddAdminAndGuestUsers extends Migration
         $user->email = 'user@example.com';
         $user->password = bcrypt('secret');
         $user->active = true;
+        $user->confirmed = true;
         $user->save();
 
         $user->attachRole($guest_role);
@@ -33,6 +34,7 @@ class AddAdminAndGuestUsers extends Migration
         $admin->email = 'admin@example.com';
         $admin->password = bcrypt('secret');
         $admin->active = true;
+        $admin->confirmed = true;
         $admin->save();
 
         $admin->attachRole($system_admin_role);

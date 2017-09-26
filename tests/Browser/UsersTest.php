@@ -73,11 +73,7 @@ class UsersTest extends DuskTestCase
                 ->assertSee('The user has been activated.');
 
             $browser->clickLink('Logout')
-                ->on(new LoginPage)
-                ->assertSee('Please Sign In')
-                ->type('email', $updated_user->email)
-                ->type('password', 'secret')
-                ->press('Login')
+                ->visit('/account/verify' . '/' . $updated_user->confirmation_code)
                 ->on(new DashboardPage)
                 ->clickLink('Logout')
 

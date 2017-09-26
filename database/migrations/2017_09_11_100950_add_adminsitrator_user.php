@@ -25,6 +25,7 @@ class AddAdminsitratorUser extends Migration
         $user->email = 'administrator@example.com';
         $user->password = bcrypt('secret');
         $user->active = true;
+        $user->confirmed = true;
         $user->save();
 
         $user->attachRole($role);

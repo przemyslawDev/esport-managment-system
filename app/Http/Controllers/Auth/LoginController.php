@@ -42,6 +42,7 @@ class LoginController extends Controller
     {
         $array = $request->only($this->username(), 'password');
         $array['active'] = 1;
+        $array['confirmed'] = 1;
 
         return $array;
     }
