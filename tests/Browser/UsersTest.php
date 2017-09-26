@@ -37,7 +37,7 @@ class UsersTest extends DuskTestCase
                 ->type('password', 'secret')
                 ->waitFor('select[name=roles]')
                 ->select('roles', '2')
-                ->script('window.scrollTo(0, 150);');
+                ->script('window.scrollTo(0, 60);');
             
             $browser->press('Submit')
                 ->waitFor('.alert')
