@@ -23,7 +23,7 @@ class RegisterControllerTest extends TestCase
         $this->get('/account/verify' . '/' . $user->confirmation_code)
             ->assertRedirect('/dashboard');
 
-        $this->assertTrue(User::where('id', $user->id)->first()->confirmed);
+        $this->assertTrue(User::find($user->id)->confirmed);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ class RegisterControllerTest extends TestCase
         $this->get('/account/verify' . '/' . ' ')
             ->assertRedirect('/403');
 
-        $this->assertFalse(User::where('id', $user->id)->first()->confirmed);
+        $this->assertFalse(User::find($user->id)->confirmed);
     }
 
     /** @test */

@@ -33,13 +33,13 @@ class UserService
             }
         }
 
-        return $user;
+        return User::with('employee')->find($user->id);
     }
 
     private function refreshRoles(User $user, array $array)
     {
         foreach($array['roles'] as $role_id) {
-            $role = Role::where('id', $role_id)->first();
+            $role = Role::find($role_id);
             $roles[] = $role;
         }
         $user->detachRoles();
@@ -59,7 +59,7 @@ class UserService
     private function saveExpandendUser(Employee $employee, array $array)
     {
         foreach($array['roles'] as $role_id) {
-            $role = Role::find($role_id)->first();
+            $role = Role::find($role_id);
 
             switch ($role->name) {
                 case 'manager': 
