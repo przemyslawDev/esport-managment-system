@@ -7,6 +7,7 @@ use App\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
+use Auth;
 
 class UserController extends Controller
 {
@@ -16,8 +17,8 @@ class UserController extends Controller
     }
 
     public function getAll()
-    {
-        $users = User::with('roles')->paginate();
+    {   
+        $users = User::where('id', '!=',Auth::id())->with('roles')->paginate();
 
         return response()->json($users);
     }

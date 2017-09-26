@@ -8,7 +8,7 @@
                 </select>
             </div>
         </div>
-        <form v-on:submit.prevent>
+        <form v-on:submit.prevent v-if="user.type">
             <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
             <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
 
@@ -31,9 +31,12 @@
                 <input-text :name="'Office'" v-model="user.employee.office" :placeholder="'Office'"></input-text>
                 <div class="form-group">
                     <label>Birthdate</label>
-                    <datepicker name="birthdate" v-model="user.employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" 
-                    :calendar-button="true" :calendar-button-icon="'fa fa-calendar'"></datepicker>
+                    <datepicker name="birthdate" v-model="user.employee.birthdate" :format="'MM-dd-yyyy'" :bootstrapStyling="true" :calendar-button="true" :calendar-button-icon="'fa fa-calendar'"></datepicker>
                 </div>
+            </template>
+
+            <template v-if="roleHasSelected(user.roles, getRoleByName(roles, 'manager').id)">
+                <input-text :name="'Nickname'" v-model="user.employee.manager.nickname" :placeholder="'Nickname'"></input-text>
             </template>
 
             <spinner-button :condition="sending" :submit="submit"></spinner-button>
@@ -57,11 +60,15 @@ export default {
                     firstname: '',
                     lastname: '',
                     office: '',
-                    birthdate: ''
+                    birthdate: '',
+                    manager: {
+                        nickname: ''
+                    }
                 },
-                type: 'none'
+                type: null
             },
-            roles: null,
+            roles: [],
+            all_roles: [],
             typeOptions: [
                 {
                     text: "None",
@@ -74,16 +81,48 @@ export default {
             ]
         }
     },
+    watch: {
+        user: {
+            handler(user) {
+               if(user.type == 'none') { 
+                   this.roles = [
+                       this.getRoleByName(this.all_roles, 'system_admin'),
+                       this.getRoleByName(this.all_roles, 'admin')
+                   ];
+               } else {
+                   this.roles = this.all_roles;
+               }
+            },
+            deep: true
+        }
+    },
     mounted() {
         this.getRoles();
     },
     methods: {
+        getRoleByName(roles, role_name) {
+            for (var i = 0; i < roles.length; i++) {
+                if (roles[i].name === role_name) {
+                    return roles[i];
+                }
+            }
+            return {};
+        },
+        roleHasSelected(selected_roles_ids, role_id) {
+            for (var i = 0; i < selected_roles_ids.length; i++) {
+                if (selected_roles_ids[i] == role_id) {
+                    return true;
+                }
+            }
+            return false;
+        },
         getRoles() {
             const th = this;
             this.loading_roles = true;
             axios.get('/roles/get/all')
                 .then(function(response) {
                     th.roles = response.data;
+                    th.all_roles = response.data;
                     th.loading_roles = false;
                 })
                 .catch(function(error) {
@@ -101,13 +140,17 @@ export default {
                 roles: this.user.roles,
                 type: this.user.type,
             }
-            if(this.user.type === 'employee') {
+            if (this.user.type === 'employee') {
                 data.firstname = this.user.employee.firstname;
                 data.lastname = this.user.employee.lastname;
                 data.office = this.user.employee.office;
                 data.birthdate = this.user.employee.birthdate;
             }
-            
+
+            if (this.roleHasSelected(this.user.roles, this.getRoleByName(this.all_roles, 'manager').id)) {
+                data.nickname = this.user.employee.manager.nickname;
+            }
+
             this.makeRequest(data);
         },
         makeRequest(data) {
@@ -130,6 +173,7 @@ export default {
                         th.error += r.errors.lastname ? r.errors.lastname + ' ' : '';
                         th.error += r.errors.office ? r.errors.office + ' ' : '';
                         th.error += r.errors.birthdate ? r.errors.birthdate + ' ' : '';
+                        th.error += r.errors.nickname ? r.errors.nickname + ' ' : '';
                     } else {
                         th.error += 'Fatal error. '
                         th.error += r.message ? r.message + ' ' : '';

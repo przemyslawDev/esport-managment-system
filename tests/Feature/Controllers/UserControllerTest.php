@@ -40,7 +40,7 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $count = User::count();
+        $count = User::count() - 1;
 
         $response = $this->json('get', '/users/get/all')
             ->assertSuccessful()->decodeResponseJson();
