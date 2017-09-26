@@ -37,10 +37,12 @@ class UsersTest extends DuskTestCase
                 ->type('password', 'secret')
                 ->waitFor('select[name=roles]')
                 ->select('roles', '2')
-                ->script('window.scrollTo(0, 100);');
+                ->script('window.scrollTo(0, 160);');
             
             $browser->press('Submit')
-                ->waitFor('.alert', 10)
+                ->script('window.scrollTo(0, 10);');
+            
+            $browser->waitFor('.alert')
                 ->assertSee('Data created.')
                 ->clickLink('Users')
                 ->on(new UsersPage)
