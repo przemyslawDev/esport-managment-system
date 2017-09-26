@@ -46,7 +46,7 @@ class TeamController extends Controller
 
     public function get($id) 
     {
-        $team = Team::where('id', $id)->with('games')->first();
+        $team = Team::with('games')->find($id);
 
         return response()->json($team);
     }

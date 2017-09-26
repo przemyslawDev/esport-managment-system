@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function get($id)
     {
-        $user = User::where('id', $id)->with('roles')->first();
+        $user = User::with('roles')->find($id);
 
         return response()->json($user);
     }

@@ -151,10 +151,12 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
+        $role = Role::first();
+
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => [3],
+            'roles' => [$role->id],
             'type' => 'none'
         ];
 
@@ -178,10 +180,12 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
+        $role = Role::first();
+
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => [3],
+            'roles' => [$role->id],
             'type' => 'employee',
             'firstname' => 'test',
             'lastname' => 'test',
@@ -213,6 +217,53 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
+    public function store_user_manager_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $manager_role = Role::where('name', 'manager')->first();
+
+        $data = [
+            'email' => 'test@example.com',
+            'password' => 'test123',
+            'roles' => [$manager_role->id],
+            'type' => 'employee',
+            'firstname' => 'test',
+            'lastname' => 'test',
+            'office' => 'test',
+            'birthdate' => Carbon::now()->subYears(20)->toDateString(),
+            'nickname' => 'test'
+        ];
+
+        $response = $this->json('post', '/users', $data)->assertSuccessful()
+        ->decodeResponseJson();
+
+        $this->assertDatabaseHas('users', [
+            'email' => $data['email']
+        ]);
+
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
+
+        $this->assertDatabaseHas('employees', [
+            'user_id' => $response['id'],
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'office' => $data['office'],
+            'birthdate' => $data['birthdate']
+        ]);
+
+        $this->assertDatabaseHas('managers', [
+            'employee_id' => $response['employee']['id'],
+            'nickname' => 'test'
+        ]);
+    }
+
+    /** @test */
     public function store_as_admin_response_permissions_error_test()
     {
         $this->createAdmin();
@@ -231,10 +282,12 @@ class UserControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
+        $role = Role::first();
+
         $data = collect([
             'email' => 'test@example.com',
             'password' => 'test123',
-            'roles' => [3],
+            'roles' => [$role->id],
             'type' => 'none'
         ]);
 
