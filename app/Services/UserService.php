@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use Mail;
 use App\User;
 use App\Role;
 use App\Mail\UserVerification;
-use Mail;
+use Modules\Administration\Models\Employee;
 
 class UserService 
 {
@@ -27,7 +28,8 @@ class UserService
         if(!$update) {
             Mail::to($user->email)->send(new UserVerification($user));
             if($array['type'] !== 'none') {
-                $this->saveEmployee($user, $array);
+                $employee = $this->saveEmployee($user, $array);
+                $this->saveExpandendUser($employee, $array);
             }
         }
 
@@ -46,11 +48,27 @@ class UserService
 
     private function saveEmployee(User $user, array $array) 
     {
-        $user->employee()->create([
+        return $user->employee()->create([
             'firstname' => $array['firstname'],
             'lastname' => $array['lastname'],
             'office' => $array['office'],
             'birthdate' => $array['birthdate']
         ]);
+    }
+
+    private function saveExpandendUser(Employee $employee, array $array)
+    {
+        foreach($array['roles'] as $role_id) {
+            $role = Role::find($role_id)->first();
+
+            switch ($role->name) {
+                case 'manager': 
+                    $employee->manager()->create([
+                        'nickname' => $array['nickname']
+                    ]);
+                default: 
+                    //
+            }
+        }
     }
 }
