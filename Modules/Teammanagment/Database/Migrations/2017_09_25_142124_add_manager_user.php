@@ -25,6 +25,7 @@ class AddManagerUser extends Migration
         $user->email = 'manager@example.com';
         $user->password = bcrypt('secret');
         $user->active = true;
+        $user->confirmed = true;
         $user->save();
 
         $user->attachRole($role);

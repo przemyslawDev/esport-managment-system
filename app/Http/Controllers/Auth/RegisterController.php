@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Exceptions\DontHavePermissionException;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -57,7 +59,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return
      */
     protected function create(array $data)
     {
@@ -65,8 +67,34 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'avatar' => '',
-            'active' => false
+            'active' => false,
+            'confirmation_code' => str_random(30)
         ]);
+    }
+
+    public function confirm($confirmation_code)
+    {
+        if (!$confirmation_code) {
+            throw new DontHavePermissionException;
+        }
+
+        $user = User::where('confirmation_code', $confirmation_code)->first();
+
+        if(!$user) {
+            throw new DontHavePermissionException;
+        }
+
+        $user->active = true;
+        $user->confirmed = true;
+        $user->confirmation_code = null;
+        $user->save();
+
+        if(Auth::check()) {
+            Auth::logout();
+        }
+        Auth::login($user);
+        
+        return redirect()->route('dashboard');
     }
 
     public function showRegistrationForm()

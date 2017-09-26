@@ -568,7 +568,7 @@ class UserControllerTest extends TestCase
     public function resetPassword_as_guest_response_permission_error_test() 
     {
         $user = factory(User::class)->create();
-
+        
         $this->json('get', '/users/password/reset' . '/' . $user->id)
             ->assertStatus(401);
     }

@@ -33,7 +33,7 @@ class LoginTest extends DuskTestCase
                     ->assertSee('These credentials do not match our records.');
         });
     }
-
+    
     public function testLogin_success()
     {
         $this->browse(function (Browser $browser) {

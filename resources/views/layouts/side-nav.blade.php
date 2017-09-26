@@ -7,6 +7,8 @@
                     @include('layouts.navs.system-admin')
                 @elseif(Auth::user()->hasRole('admin'))
                     @include('layouts.navs.admin');
+                @elseif(Auth::user()->hasRole('manager'))
+                    @include('layouts.navs.manager')
                 @endif
             </ul>
         </div>

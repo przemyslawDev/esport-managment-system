@@ -3,7 +3,7 @@
 Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' => 'Modules\Teammanagment\Http\Controllers'], function()
 {
     Route::middleware('auth')->group(function () {
-        Route::prefix('games')->middleware('role:system_admin')->group(function () {
+        Route::prefix('games')->middleware('role:system_admin|manager')->group(function () {
             Route::get('/', 'GameController@index')->name('teammanagment.games.index');
             Route::get('/{id}', 'GameController@show')->name('teammanagment.games.show');
 
@@ -11,7 +11,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' =>
             Route::get('/get/all', 'GameController@getAll')->name('teammanagment.games.get-all');            
         });
         
-        Route::prefix('teams')->middleware('role:system_admin')->group(function () {
+        Route::prefix('teams')->middleware('role:system_admin|manager')->group(function () {
             Route::get('/', 'TeamController@index')->name('teammanagment.teams.index');
             Route::get('/create', 'TeamController@create')->name('teammanagment.teams.create');
             Route::get('/{id}', 'TeamController@show')->name('teammanagment.teams.show');

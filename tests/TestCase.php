@@ -15,7 +15,8 @@ abstract class TestCase extends BaseTestCase
         $user = factory(User::class)->create([
             'email' => 'admintest@example.com',
             'password' => bcrypt('test'),
-            'active' => true
+            'active' => true,
+            'confirmed' => true
         ]);
 
         $role = Role::where('name', 'admin')->first();
@@ -32,7 +33,8 @@ abstract class TestCase extends BaseTestCase
         $user = factory(User::class)->create([
             'email' => 'systemadmintest@example.com',
             'password' => bcrypt('test'),
-            'active' => true
+            'active' => true,
+            'confirmed' => true
         ]);
 
         $role = Role::where('name', 'system_admin')->first();

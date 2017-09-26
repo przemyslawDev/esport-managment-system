@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\User;
 use App\Role;
+use App\Mail\UserVerification;
+use Mail;
 
 class UserService 
 {
@@ -13,6 +15,7 @@ class UserService
         if(!$update) {
             $user = new User();
             $user->password = bcrypt($array['password']);
+            $user->confirmation_code = str_random(30);
         } else {
             $user = User::findOrFail($array['id']);
         }
@@ -21,8 +24,11 @@ class UserService
 
         $this->refreshRoles($user, $array);
     
-        if(!$update && $array['type'] !== 'none') {
-            $this->saveEmployee($user, $array);
+        if(!$update) {
+            Mail::to($user->email)->send(new UserVerification($user));
+            if($array['type'] !== 'none') {
+                $this->saveEmployee($user, $array);
+            }
         }
 
         return $user;
