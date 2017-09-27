@@ -11,26 +11,24 @@ use Modules\Administration\Models\Employee;
 class GameTest extends TestCase
 {
     /** @test */
-    public function team_success_test()
+    public function teams_success_test()
     {   
-        $game = factory(Game::class)
-            ->create()
-            ->each(function ($g) {
-                $g->teams()->save(factory(Team::class)->create());
-            });
+        $game = factory(Game::class)->create();
+        $team = factory(Team::class)->create();
 
-        $this->assertNotEmpty($game);
+        $game->teams()->save($team);
+
+        $this->assertNotEmpty($game->teams);
     }
 
     /** @test */
-    public function manager_success_test()
+    public function managers_success_test()
     {   
-        $game = factory(Game::class)
-            ->create()
-            ->each(function ($g) {
-                $g->managers()->save(factory(Manager::class)->create());
-            });
+        $game = factory(Game::class)->create();
+        $manager = factory(Manager::class)->create();
 
-        $this->assertNotEmpty($game);
+        $game->managers()->save($manager);
+
+        $this->assertNotEmpty($game->managers);
     }
 }

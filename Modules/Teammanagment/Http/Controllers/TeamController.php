@@ -5,8 +5,10 @@ namespace Modules\Teammanagment\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Auth;
 use Modules\Teammanagment\Models\Team;
 use Modules\Teammanagment\Models\Game;
+use Modules\Teammanagment\Models\Manager;
 use Modules\Teammanagment\Http\Requests\StoreTeamRequest;
 use Modules\Teammanagment\Http\Requests\UpdateTeamRequest;
 
@@ -86,5 +88,38 @@ class TeamController extends Controller
     {
         $team = Team::findOrFail($team_id);
         $team->games()->detach($game_id);
+    }
+
+    public function attachManager($team_id, $manager_id = null)
+    {
+        $team = Team::findOrFail($team_id);
+
+        if(!$manager_id) {
+            $user = Auth::user();
+            if($user->hasRole('manager')) {
+                $manager = $user->employee->manager;
+                $team->manager()->associate($manager);
+                $team->save();
+            }
+        } else {
+            $team->manager()->associate($manager_id);
+            $team->save();
+        }
+    }
+
+    public function detachManager($team_id, $manager_id = null)
+    {
+        $team = Team::findOrFail($team_id);
+
+        if(!$manager_id) {
+            $user = Auth::user();
+            if($user->hasRole('manager')) {
+                $team->manager()->dissociate();
+                $team->save();
+            }
+        } else {
+            $team->manager()->dissociate();
+            $team->save();
+        }
     }
 }

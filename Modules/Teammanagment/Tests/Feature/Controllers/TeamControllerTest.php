@@ -6,18 +6,30 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Teammanagment\Models\Team;
 use Modules\Teammanagment\Models\Game;
+use Modules\Teammanagment\Models\Manager;
 
 class TeamControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function prepareRelatedData() 
+    private function prepareTeamGameRelatedData() 
     {
         $team = factory(Team::class)->create();
         $game = factory(Game::class)->create();
 
         return [
-            'game' =>$game, 
+            'game' => $game, 
+            'team' => $team
+        ];
+    }
+
+    private function prepareTeamManagerRelatedData()
+    {
+        $team = factory(Team::class)->create();
+        $manager = factory(Manager::class)->create();
+
+        return [
+            'manager' => $manager,
             'team' => $team
         ];
     }
@@ -370,7 +382,7 @@ class TeamControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $array = $this->prepareRelatedData();
+        $array = $this->prepareTeamGameRelatedData();
 
         $this->json('get', '/teammanagment/teams' . '/' . $array['team']->id . '/games' . '/' . $array['game']->id . '/attach')
             ->assertSuccessful();
@@ -408,7 +420,7 @@ class TeamControllerTest extends TestCase
     {
         $this->createSystemAdmin();
 
-        $array = $this->prepareRelatedData();
+        $array = $this->prepareTeamGameRelatedData();
 
         $this->json('get', '/teammanagment/teams' . '/' . $array['team']->id . '/games' . '/' . $array['game']->id . '/detach')
             ->assertSuccessful();
@@ -438,6 +450,117 @@ class TeamControllerTest extends TestCase
         $game = factory(Game::class)->create();
 
         $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/games' . '/' . $game->id . '/detach')
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function attachManager_as_system_admin_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $data = $this->prepareTeamManagerRelatedData();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $data['team']->id . '/manager' . '/' . $data['manager']->id . '/attach')
+            ->assertSuccessful();
+        $this->assertDatabaseHas('teams', [
+            'id' => $data['team']->id,
+            'name' => $data['team']->name,
+            'manager_id' => $data['manager']->id
+        ]);
+    }
+
+    /** @test */
+    public function attachManager_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+        
+        $team = factory(Team::class)->create();
+        $manager = factory(Manager::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/attach')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function attachManager_as_guest_response_permission_error_test()
+    {
+        $team = factory(Team::class)->create();
+        $manager = factory(Manager::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/attach')
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function attachManager_detachManager_as_manager_response_success_test()
+    {   
+        $user = $this->createManager();
+        
+        $team = factory(Team::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager/attach')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('teams', [
+            'id' => $team->id,
+            'name' => $team->name,
+            'manager_id' => $user->employee->manager->id
+        ]);
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager/detach')
+            ->assertSuccessful();
+
+        $this->assertDatabaseMissing('teams', [
+            'id' => $team->id,
+            'name' => $team->name,
+            'manager_id' => $user->employee->manager->id
+        ]);
+
+        $this->assertDatabaseHas('managers', [
+            'id' => $user->employee->manager->id
+        ]);
+    }
+
+    /** @test */
+    public function detachManager_as_system_admin_response_success_test()
+    {
+        $this->createSystemAdmin();
+        
+        $data = $this->prepareTeamManagerRelatedData();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $data['team']->id . '/manager' . '/' . $data['manager']->id . '/detach')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('teams', [
+            'id' => $data['team']->id,
+            'name' => $data['team']->name,
+            'manager_id' => null
+        ]);
+
+        $this->assertDatabaseHas('managers', [
+            'id' => $data['manager']->id
+        ]);
+    }
+
+    /** @test */
+    public function detachManager_as_admin_response_permission_error_test()
+    {
+        $this->createAdmin();
+        
+        $team = factory(Team::class)->create();
+        $manager = factory(Manager::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/detach')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function detachManager_as_guest_response_permission_error_test()
+    {
+        $team = factory(Team::class)->create();
+        $manager = factory(Manager::class)->create();
+
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/detach')
             ->assertStatus(401);
     }
 }

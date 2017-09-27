@@ -6,18 +6,29 @@ use Tests\TestCase;
 use Modules\Teammanagment\Models\Manager;
 use Modules\Teammanagment\Models\Game;
 use Modules\Teammanagment\Models\Employee;
+use Modules\Teammanagment\Models\Team;
 
 class ManagerTest extends TestCase
 {
     /** @test */
-    public function game_success_test()
+    public function games_success_test()
     {   
-        $manager = factory(Manager::class)
-            ->create()
-            ->each(function ($m) {
-                $m->games()->save(factory(Game::class)->create());
-            });
+        $manager = factory(Manager::class)->create();
+        $game = factory(Game::class)->create();
 
-        $this->assertNotEmpty($manager);
+        $manager->games()->save($game);
+
+        $this->assertNotEmpty($manager->games);
+    }
+
+    /** @test */
+    public function teams_success_test()
+    {
+        $manager = factory(Manager::class)->create();
+        $team = factory(Team::class)->create();
+
+        $manager->teams()->save($team);
+
+        $this->assertNotEmpty($manager->teams);
     }
 }

@@ -17,4 +17,9 @@ class Manager extends Model
     {
         return $this->belongsToMany('Modules\Teammanagment\Models\Game', 'managers_games', 'manager_id', 'game_id');
     }
+
+    public function teams()
+    {
+        return $this->hasMany('Modules\Teammanagment\Models\Team');
+    }
 }
