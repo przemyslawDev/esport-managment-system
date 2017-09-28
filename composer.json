@@ -10,6 +10,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "mnabialek/laravel-eloquent-filter": "^0.1.1",
         "nwidart/laravel-modules": "^2.1",
         "php-coveralls/php-coveralls": "^1.0",
         "santigarcor/laratrust": "4.0.*"

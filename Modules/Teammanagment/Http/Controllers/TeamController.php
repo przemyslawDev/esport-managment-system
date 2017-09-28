@@ -21,7 +21,7 @@ class TeamController extends Controller
 
     public function getAll() 
     {
-        $teams = Team::with('games')->paginate();
+        $teams = Team::with(['games', 'manager'])->paginate();
 
         return response()->json($teams);
     }
@@ -48,7 +48,7 @@ class TeamController extends Controller
 
     public function get($id) 
     {
-        $team = Team::with('games')->find($id);
+        $team = Team::with(['games', 'manager'])->find($id);
 
         return response()->json($team);
     }
@@ -97,7 +97,7 @@ class TeamController extends Controller
         if(!$manager_id) {
             $user = Auth::user();
             if($user->hasRole('manager')) {
-                $manager = $user->employee->manager;
+                $manager = $user->employee->manager()->first();
                 $team->manager()->associate($manager);
                 $team->save();
             }
@@ -107,19 +107,12 @@ class TeamController extends Controller
         }
     }
 
-    public function detachManager($team_id, $manager_id = null)
+    public function detachManager($team_id)
     {
         $team = Team::findOrFail($team_id);
 
-        if(!$manager_id) {
-            $user = Auth::user();
-            if($user->hasRole('manager')) {
-                $team->manager()->dissociate();
-                $team->save();
-            }
-        } else {
-            $team->manager()->dissociate();
-            $team->save();
-        }
+        $team->manager()->dissociate();
+        $team->save();
+
     }
 }

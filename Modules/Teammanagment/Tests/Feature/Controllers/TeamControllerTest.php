@@ -528,7 +528,7 @@ class TeamControllerTest extends TestCase
         
         $data = $this->prepareTeamManagerRelatedData();
 
-        $this->json('get', '/teammanagment/teams' . '/' . $data['team']->id . '/manager' . '/' . $data['manager']->id . '/detach')
+        $this->json('get', '/teammanagment/teams' . '/' . $data['team']->id . '/manager/detach')
             ->assertSuccessful();
 
         $this->assertDatabaseHas('teams', [
@@ -548,9 +548,8 @@ class TeamControllerTest extends TestCase
         $this->createAdmin();
         
         $team = factory(Team::class)->create();
-        $manager = factory(Manager::class)->create();
 
-        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/detach')
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager/detach')
             ->assertStatus(403);
     }
 
@@ -558,9 +557,8 @@ class TeamControllerTest extends TestCase
     public function detachManager_as_guest_response_permission_error_test()
     {
         $team = factory(Team::class)->create();
-        $manager = factory(Manager::class)->create();
 
-        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager' . '/' . $manager->id . '/detach')
+        $this->json('get', '/teammanagment/teams' . '/' . $team->id . '/manager/detach')
             ->assertStatus(401);
     }
 }

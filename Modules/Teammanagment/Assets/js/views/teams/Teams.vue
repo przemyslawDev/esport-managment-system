@@ -13,6 +13,7 @@
                                 <th>Name</th>
                                 <th>Tag</tH>
                                 <th>Games</th>
+                                <th>Manager</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -34,11 +35,13 @@
                                         </select>
                                     </template>
                                 </td>
+                                <td> {{ team.manager ? team.manager.nickname : ''}} </td>
                                 <td>
                                     <div class="">
                                         <a :href="'teams/' + team.id" type="button" class="btn btn-info btn-sm">View</a>
                                         <a :href="'teams/' + team.id + '/edit'" type="button" class="btn btn-primary btn-sm">Edit</a>
-                                        <a @click="deleteTeam(team.id)" type="button" class="btn btn-danger btn-sm">Delete</a>                                    
+                                        <a @click="deleteTeam(team.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
+                                        <a v-if="isManagerStatus && !team.manager" @click="attachManager(team.id)" type="button" class="btn btn-default btn-sm">Get this team</a>
                                     </div>
                                 </td>
                             </tr>
@@ -75,11 +78,19 @@ export default {
             type: String, // '1' or '0'
             default: false,
             required: true
+        },
+        ismanager: {
+            type: String, // '1' or '0'
+            default: false,
+            required: true
         }
     },
     computed: {
         canEditStatus() {
             return ((this.canedit === '1') ? true : false);
+        },
+        isManagerStatus() {
+            return ((this.ismanager === '1') ? true : false);
         }
     },
     mounted() {
@@ -87,6 +98,19 @@ export default {
         this.getGames();
     },
     methods: {
+         attachManager(team_id) {
+             const th = this;
+             axios.get('/teammanagment/teams/' + team_id + '/manager/attach')
+                 .then(function(response) {
+                     th.getData();
+                     th.success += 'You get this team.';
+                 })
+                 .catch(function(error) {
+                     let r = error.response.data;
+                     th.error += 'Fatal error. ';
+                     th.error += r.message ? r.message + ' ' : '';
+                 });
+         },
          getGames() {
             const th = this;
             axios.get('/teammanagment/games/get/all')

@@ -7,7 +7,7 @@
                 <h3 class="panel-title">{{ _('Teams') }}</h3>
             </div>
             <div class="panel-body">
-                <teams canedit="{{ Auth::user()->hasRole(['system_admin'])}}"></teams>
+                <teams ismanager="{{ Auth::user()->hasRole('manager') }}" canedit="{{ Auth::user()->hasRole(['system_admin'])}}"></teams>
             </div>
         </div>
     </div>

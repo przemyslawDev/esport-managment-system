@@ -6,6 +6,6 @@ trait EmployeeTrait
 {
     public function employee() 
     {
-        return $this->hasOne('Modules\Administration\Models\Employee', 'user_id');
+        return $this->hasOne('Modules\Administration\Models\Employee');
     }
 }

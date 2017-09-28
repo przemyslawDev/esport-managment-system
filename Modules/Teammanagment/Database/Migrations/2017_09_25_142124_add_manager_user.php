@@ -5,6 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\User;
 use App\Role;
+use Modules\Administration\Models\Employee;
+use Carbon\Carbon;
 
 class AddManagerUser extends Migration
 {
@@ -27,6 +29,16 @@ class AddManagerUser extends Migration
         $user->active = true;
         $user->confirmed = true;
         $user->save();
+
+        $employee = new Employee();
+        $employee->firstname = 'manager';
+        $employee->lastname = 'manager';
+        $employee->office = 'manager';
+        $employee->birthdate = Carbon::now()->subYears(20)->toDateString();
+        $employee->save();
+
+        $user->employee()->save($employee);
+        $employee->manager()->create(['nickname' => 'manager']);
 
         $user->attachRole($role);
     }

@@ -64,7 +64,7 @@ class EmployeeController extends Controller
 
     public function get($id)
     {
-        $employee = Employee::find($id)->with('user')->first();
+        $employee = Employee::with('user')->find($id);
 
         return response()->json($employee);
     }

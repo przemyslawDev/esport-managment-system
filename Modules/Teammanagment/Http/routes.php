@@ -27,9 +27,12 @@ Route::group(['middleware' => 'web', 'prefix' => 'teammanagment', 'namespace' =>
             Route::get('/{team_id}/games/{game_id}/detach', 'TeamController@detachGame')->name('teammanagment.teams.detach-game');            
             
             Route::get('/{team_id}/manager/{manager_id?}/attach', 'TeamController@attachManager')->name('teammanagment.teams.attach-manager');
-            Route::get('/{team_id}/manager/{manager_id?}/detach', 'TeamController@detachManager')->name('teammanagment.teams.detach-manager');            
             Route::get('/{team_id}/manager/attach', 'TeamController@attachManager')->name('teammanagment.teams.attach-manager');
             Route::get('/{team_id}/manager/detach', 'TeamController@detachManager')->name('teammanagment.teams.detach-manager');                        
+        });
+
+        Route::prefix('managers')->middleware('role:system_admin')->group(function () {
+            Route::get('/get/all', 'ManagerController@getAll')->name('teammanagment.managers.get-all');
         });
     });
 });
