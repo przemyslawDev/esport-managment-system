@@ -22,16 +22,31 @@ class UserService
         }
         $user->email = $array['email'];
         $user->save();
-
-        $this->refreshRoles($user, $array);
     
         if(!$update) {
             Mail::to($user->email)->send(new UserVerification($user));
             if($array['type'] !== 'none') {
-                $employee = $this->saveEmployee($user, $array);
-                $this->saveExpandendUser($employee, $array);
+                $employee = $this->createEmployee($user, $array);
+                $this->createExpandendUser($employee, $array);
+            }
+        } else {
+            if($user->has('employee')) {
+                $employee = $user->employee()->first();
+                if($user->hasRole('manager')) {
+                    if(in_array(Role::where('name', 'manager')->first()->id , $array['roles'])) {
+                        $this->updateManager($employee, $array);
+                    } else {
+                        $this->deleteManager($employee, $array);
+                    }
+                } else {
+                    if (in_array(Role::where('name', 'manager')->first()->id, $array['roles'])) {
+                        $this->createManager($employee, $array);
+                    }
+                }
             }
         }
+
+        $this->refreshRoles($user, $array);
 
         return User::with('employee')->find($user->id);
     }
@@ -46,7 +61,7 @@ class UserService
         $user->attachRoles($roles);
     }
 
-    private function saveEmployee(User $user, array $array) 
+    private function createEmployee(User $user, array $array)
     {
         return $user->employee()->create([
             'firstname' => $array['firstname'],
@@ -56,22 +71,40 @@ class UserService
         ]);
     }
 
-    private function saveExpandendUser(Employee $employee, array $array)
+    private function createExpandendUser(Employee $employee, array $array)
     {
         foreach($array['roles'] as $role_id) {
             $role = Role::find($role_id);
 
             switch ($role->name) {
-                case 'manager': 
-                    $employee->manager()->create([
-                        'nickname' => $array['nickname']
-                    ]);
-
-                    $manager = $employee->manager()->first();
-                    $manager->games()->attach($array['manager_games']);
+                case 'manager':
+                    $this->createManager($employee, $array);
                 default: 
                     //
             }
         }
+    }
+
+    private function createManager(Employee $employee, array $array)
+    {
+        $employee->manager()->create([
+            'nickname' => $array['nickname']
+        ]);
+
+        $manager = $employee->manager()->first();
+        $manager->games()->attach($array['manager_games']);
+    }
+
+    private function updateManager(Employee $employee, array $array)
+    {
+        $manager = $employee->manager()->first();
+        $manager->nickname = $array['nickname'];
+        $manager->games()->detach();
+        $manager->games()->attach($array['manager_games']);
+    }
+
+    private function deleteManager(Employee $employee, array $array)
+    {
+        $employee->manager()->delete();
     }
 }

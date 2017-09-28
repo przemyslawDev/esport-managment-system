@@ -14,6 +14,17 @@
                     </select>
                 </div>
 
+                <template v-if="roleHasSelected(roles_ids, getRoleByName(roles, 'manager').id)">
+                    <h3>Manager Data</h3>
+                    <input-text :name="'Nickname'" v-model="user.employee.manager.nickname" :placeholder="'Nickname'"></input-text>
+                    <div v-if="!loading_games" class="form-group">
+                        <label>Games</label>
+                        <select name="manager_games" multiple class="form-control" v-model="games_ids">
+                            <option v-for="game in games" :value="game.id">{{ game.name }}</option>
+                        </select>
+                    </div>
+                </template>
+
                 <spinner-button :condition="sending" :submit="submit"></spinner-button>
             </form>
         </div>
@@ -28,10 +39,13 @@ export default {
             error: '',
             loading: false,
             loading_roles: false,
+            loading_games: false,
+            games: [],
             sending: false,
             user: {},
             roles_ids: [],
-            roles: null,
+            games_ids: [],
+            roles: [],
         }
     },
     watch: {
@@ -41,14 +55,52 @@ export default {
                 array.push(role.id);
             }, this);
             this.roles_ids = array;
+
+            array = [];
+            user.employee.manager.games.forEach(function(game) {
+                array.push(game.id);
+            }, this);
+            this.games_ids = array;
         }
     },
     mounted() {
         this.getData();
         this.getRoles();
+        this.getGames();
     },
     props: ['id'],
     methods: {
+        getRoleByName(roles, role_name) {
+            for (var i = 0; i < roles.length; i++) {
+                if (roles[i].name === role_name) {
+                    return roles[i];
+                }
+            }
+            return {};
+        },
+        roleHasSelected(selected_roles_ids, role_id) {
+            for (var i = 0; i < selected_roles_ids.length; i++) {
+                if (selected_roles_ids[i] == role_id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        getGames() {
+            const th = this;
+            this.loading_games = true;
+            axios.get('/teammanagment/games/get/all')
+                .then(function(response) {
+                    th.games = response.data.data;
+                    th.loading_games = false;
+                })
+                .catch(function(error) {
+                    let r = error.reponse.data;
+                    th.error += 'Fatal error. ';
+                    th.error += r.message ? r.message + ' ' : '';
+                    th.loading_games = false;
+                });
+        },
         getRoles() {
             const th = this;
             this.loading_roles = true;
@@ -58,7 +110,7 @@ export default {
                     th.loading_roles = false;
                 })
                 .catch(function(error) {
-                    let r = error.reponse.data;
+                    let r = error.response.data;
                     th.error += 'Fatal error. ';
                     th.error += r.message ? r.message + ' ' : '';
                     th.loading_roles = false;
@@ -73,7 +125,7 @@ export default {
                     th.loading = false;
                 })
                 .catch(function(error) {
-                    let r = error.reponse.data;
+                    let r = error.response.data;
                     th.error += 'Fatal error. ';
                     th.error += r.message ? r.message + ' ' : '';
                     th.loading = false;
@@ -84,7 +136,13 @@ export default {
             var data = {
                 email: this.user.email,
                 roles: this.roles_ids
+            };
+
+            if (this.roleHasSelected(roles_ids, this.getRoleByName(this.roles, 'manager').id)) {
+                data.nickname = this.user.employee.manager.nickname;
+                data.manager_games = this.games_ids;
             }
+
             this.makeRequest(data);
         },
         makeRequest(data) {
