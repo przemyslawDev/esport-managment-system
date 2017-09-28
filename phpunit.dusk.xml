@@ -17,14 +17,14 @@
     <!-- Administration Module -->
     <testsuites>
         <testsuite name="Browser Test Suite">
-            <directory suffix="Test.php">Modules/Administration/Tests/Browser</directory>
+            <directory suffix="Test.php">./Modules/Administration/Tests/Browser</directory>
         </testsuite>
     </testsuites>
 
     <!-- Team Managment Module -->
     <testsuites>
         <testsuite name="Browser Test Suite">
-            <directory suffix="Test.php">Modules/Teammanagment/Tests/Browser</directory>
+            <directory suffix="Test.php">./Modules/Teammanagment/Tests/Browser</directory>
         </testsuite>
     </testsuites>
 

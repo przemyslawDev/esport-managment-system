@@ -100,6 +100,7 @@ return [
             'listener' => 'Listeners',
             'migration' => 'Database/Migrations',
             //'model' => 'Entities',
+            'eloquent-filter' => 'Filters',
             'model' => 'Models',
             //'repository' => 'Repositories',
             'seeder' => 'Database/Seeders',
