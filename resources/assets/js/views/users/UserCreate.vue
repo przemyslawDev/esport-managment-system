@@ -24,8 +24,9 @@
                 </select>
             </div>
 
+            <hr />
             <template v-if="user.type === 'employee'">
-                <hr>
+                <h3>Employee Data</h3>
                 <input-text :name="'Firstname'" v-model="user.employee.firstname" :placeholder="'Firstname'"></input-text>
                 <input-text :name="'Lastname'" v-model="user.employee.lastname" :placeholder="'Lastname'"></input-text>
                 <input-text :name="'Office'" v-model="user.employee.office" :placeholder="'Office'"></input-text>
@@ -35,8 +36,16 @@
                 </div>
             </template>
 
+            <hr />
             <template v-if="roleHasSelected(user.roles, getRoleByName(roles, 'manager').id)">
+                <h3>Manager Data</h3>
                 <input-text :name="'Nickname'" v-model="user.employee.manager.nickname" :placeholder="'Nickname'"></input-text>
+                <div v-if="!loading_games" class="form-group">
+                    <label>Games</label>
+                    <select name="manager_games" multiple class="form-control" v-model="user.employee.manager.games">
+                        <option v-for="game in games" :value="game.id">{{ game.name }}</option>
+                    </select>
+                </div>
             </template>
 
             <spinner-button :condition="sending" :submit="submit"></spinner-button>
@@ -52,6 +61,7 @@ export default {
             error: '',
             sending: false,
             loading_roles: false,
+            loading_games: false,
             user: {
                 email: '',
                 password: '',
@@ -62,13 +72,15 @@ export default {
                     office: '',
                     birthdate: '',
                     manager: {
-                        nickname: ''
+                        nickname: '',
+                        games: []
                     }
                 },
                 type: null
             },
             roles: [],
             all_roles: [],
+            games: [],
             typeOptions: [
                 {
                     text: "None",
@@ -98,6 +110,7 @@ export default {
     },
     mounted() {
         this.getRoles();
+        this.getGames();
     },
     methods: {
         getRoleByName(roles, role_name) {
@@ -115,6 +128,21 @@ export default {
                 }
             }
             return false;
+        },
+        getGames() {
+            const th = this;
+            this.loading_games = true;
+            axios.get('/teammanagment/games/get/all')
+                .then(function(response) {
+                    th.games = response.data.data;
+                    th.loading_games = false;
+                })
+                .catch(function(error) {
+                    let r = error.reponse.data;
+                    th.error += 'Fatal error. ';
+                    th.error += r.message ? r.message + ' ' : '';
+                    th.loading_games = false;
+                });
         },
         getRoles() {
             const th = this;
@@ -149,6 +177,7 @@ export default {
 
             if (this.roleHasSelected(this.user.roles, this.getRoleByName(this.all_roles, 'manager').id)) {
                 data.nickname = this.user.employee.manager.nickname;
+                data.manager_games = this.user.employee.manager.games;
             }
 
             this.makeRequest(data);

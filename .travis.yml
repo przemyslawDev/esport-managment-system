@@ -26,8 +26,8 @@ install:
 before_script:
    #- export DISPLAY=:0 
    #- sh -e /etc/init.d/xvfb start
-   - ./vendor/laravel/dusk/bin/chromedriver-linux &
-   - php artisan serve &
+   #- ./vendor/laravel/dusk/bin/chromedriver-linux &
+   #- php artisan serve &
 
 script:
    #- npm run prod
@@ -35,7 +35,7 @@ script:
    - composer dump-autoload
    - mkdir -p build/logs
    - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-   - php artisan dusk
+   #- php artisan dusk
 
 after_script:
    - php vendor/bin/coveralls -v

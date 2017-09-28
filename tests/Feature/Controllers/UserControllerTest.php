@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controllers;
 
+use Modules\Administration\Models\Employee;
+use Modules\Teammanagment\Models\Game;
 use Tests\TestCase;
 use App\User;
 use App\Role;
@@ -223,6 +225,10 @@ class UserControllerTest extends TestCase
 
         $manager_role = Role::where('name', 'manager')->first();
 
+        $first_game = Game::first();
+
+        $second_game = Game::skip(1)->first();
+
         $data = [
             'email' => 'test@example.com',
             'password' => 'test123',
@@ -232,7 +238,8 @@ class UserControllerTest extends TestCase
             'lastname' => 'test',
             'office' => 'test',
             'birthdate' => Carbon::now()->subYears(20)->toDateString(),
-            'nickname' => 'test'
+            'nickname' => 'test',
+            'manager_games' => [$first_game->id, $second_game->id]
         ];
 
         $response = $this->json('post', '/users', $data)->assertSuccessful()
@@ -261,6 +268,15 @@ class UserControllerTest extends TestCase
             'employee_id' => $response['employee']['id'],
             'nickname' => 'test'
         ]);
+
+        $manager = Employee::find($response['employee']['id'])->manager()->first();
+
+        foreach($data['manager_games'] as $game_id) {
+            $this->assertDatabaseHas('managers_games', [
+                'manager_id' => $manager->id,
+                'game_id' => $game_id
+            ]);
+        }
     }
 
     /** @test */
