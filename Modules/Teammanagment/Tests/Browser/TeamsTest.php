@@ -119,6 +119,52 @@ class TeamsTest extends DuskTestCase
         });
     }
 
+    /*public function test_team_attach_detach_manager_as_system_admin()
+    {
+        $user = User::where('email', 'admin@example.com')->first();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $team = Team::first();
+
+            $browser->loginAs($user)
+                ->visit(new TeamViewPage($team))
+                ->click('button[]Attach Manager');
+
+            $browser->waitFor('table')->with('table', function ($table) use ($team) {
+                $table->script('window.scrollTo(0,100);');
+
+                $row = $this->getManagerRowByNickname($table, 'manager');
+                $row_selector = $row->findElement(WebDriverBy::tagName('tr'))->click();
+            });
+
+            $browser->waitFor('.alert')
+                ->assertSee('You attach manager.');
+
+            $browser->clickLink('Detach Manager')
+                ->waitFor('.alert')
+                ->assertSee('You detach this team.');
+        });
+    }
+
+    public function test_team_attach_detach_as_manager()
+    {
+        $user = User::where('email', 'manager@example.com')->first();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $team = Team::first();
+
+            $browser->loginAs($user)
+                ->visit(new TeamsPage)
+                ->assertSee('Teams');
+
+            $browser->waitFor('table')->with('table', function ($table) use ($team) {
+                $table->script('window.scrollTo(0,100);');
+
+                $row = $this->getTeamRow($table, $team);
+            });
+        });
+    }*/
+
     public function test_team_delete()
     {
         $user = User::where('email', 'admin@example.com')->first();
@@ -141,7 +187,7 @@ class TeamsTest extends DuskTestCase
         });
     }
 
-     /**
+    /**
     * Get row where is the team
     * @return \Facebook\WebDriver\Remote\RemoteWebElement|null
     */
@@ -151,6 +197,22 @@ class TeamsTest extends DuskTestCase
         $rows = $table->elements('tbody tr');
         foreach ($rows as $row) {
             if (strpos($row->getText(), $team->name) !== false) {
+                return $row;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get row where is the manager
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement|null
+     */
+    private function getManagerRowByNickname($table, $nickname)
+    {
+        $table->assertSee($nickname);
+        $rows = $table->elements('tbody tr');
+        foreach ($rows as $row) {
+            if (strpos($row->getText(), $nickname) !== false) {
                 return $row;
             }
         }

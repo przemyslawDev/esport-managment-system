@@ -11,10 +11,9 @@
     $navbar-inverse-link-hover-bg: lighten($navbar-inverse-bg, 5%);
     $navbar-inverse-border: lighten($navbar-inverse-bg, 8%);
 
-    position: fixed;
+    position: relative;
     margin: 0 -15px;
     height: 100vh;
-    width: inherit;
     overflow: auto;
     border-top-width: 0;
     border-bottom-width: 0;
