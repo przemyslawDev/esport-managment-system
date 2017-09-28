@@ -66,6 +66,9 @@ class UserService
                     $employee->manager()->create([
                         'nickname' => $array['nickname']
                     ]);
+
+                    $manager = $employee->manager()->first();
+                    $manager->games()->attach($array['manager_games']);
                 default: 
                     //
             }

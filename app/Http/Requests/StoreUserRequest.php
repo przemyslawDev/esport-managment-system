@@ -34,7 +34,8 @@ class StoreUserRequest extends FormRequest
             'office' => 'required_unless:type,none|min:2|max:255',
             'birthdate' => 'required_unless:type,none|date|before:tomorrow',
 
-            'nickname' => 'required_if_in_array:roles,4'
+            'nickname' => 'required_if_in_array:roles,4',
+            'manager_games' => 'required_if_in_array:roles,4'
         ];
     }
 }
