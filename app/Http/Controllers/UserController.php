@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function get($id)
     {
-        $user = User::with('roles')->find($id);
+        $user = User::with(['roles', 'employee.manager.games'])->find($id);
 
         return response()->json($user);
     }

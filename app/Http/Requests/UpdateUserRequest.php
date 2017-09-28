@@ -26,6 +26,9 @@ class UpdateUserRequest extends FormRequest
         return [
             'email' => 'required|email',
             'roles' => 'required|array',
+
+            'nickname' => 'required_if_in_array:roles,4',
+            'manager_games' => 'required_if_in_array:roles,4'
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use Modules\Administration\Models\Employee;
 use Modules\Teammanagment\Models\Game;
+use Modules\Teammanagment\Models\Manager;
 use Tests\TestCase;
 use App\User;
 use App\Role;
@@ -472,9 +473,13 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $first_role = Role::first();
+
+        $second_role = Role::skip(1)->first();
+
         $data = [
             'email' => 'test@example.com',
-            'roles' => [2,3]
+            'roles' => [$first_role->id , $second_role->id]
         ];
 
         $response = $this->json('put', '/users' . '/' . $user->id, $data)
@@ -493,6 +498,116 @@ class UserControllerTest extends TestCase
                 'role_id' => $role_id
             ]);
         }
+    }
+
+    /** @test */
+    public function update_manager_to_administrator_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $user = factory(User::class)->create();
+
+        $role = Role::where('name', 'manager')->first();
+
+        $user->attachRole($role);
+
+        $manager = factory(Manager::class)->create();
+
+        $employee = Employee::find($manager->employee_id);
+
+        $user->employee()->save($employee);
+
+        $admin_role = Role::where('name', 'admin')->first();
+
+        $data = [
+            'email' => 'test@example.com',
+            'roles' => [$admin_role->id]
+        ];
+
+        $this->assertDatabaseHas('managers', [
+            'id' => $manager->id,
+            'nickname' => $manager->nickname
+        ]);
+
+        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+            ->assertSuccessful()->decodeResponseJson();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $response['id'],
+            'email' => $data['email'],
+            'avatar' => $user->avatar,
+            'active' => false
+        ]);
+
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
+
+        $this->assertDatabaseHas('employees', [
+            'id' => $employee->id,
+            'firstname' => $employee->firstname
+        ]);
+
+        $this->assertDatabaseMissing('managers', [
+            'id' => $manager->id,
+            'nickname' => $manager->nickname
+        ]);
+    }
+
+    /** @test */
+    public function update_simple_user_to_manager_response_success_test()
+    {
+        $this->createSystemAdmin();
+
+        $user = factory(User::class)->create();
+
+        $manager_role = Role::where('name', 'manager')->first();
+
+        $user->employee()->save(factory(Employee::class)->create());
+
+        $game = Game::first();
+
+        $data = [
+            'email' => 'test@example.com',
+            'roles' => [$manager_role->id],
+            'nickname' => 'test',
+            'manager_games' => [$game->id]
+        ];
+
+        $response = $this->json('put', '/users' . '/' . $user->id, $data)
+            ->assertSuccessful()->decodeResponseJson();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $response['id'],
+            'email' => $data['email'],
+            'avatar' => $user->avatar,
+            'active' => false
+        ]);
+
+        foreach($data['roles'] as $role_id) {
+            $this->assertDatabaseHas('role_user', [
+                'user_id' => $response['id'],
+                'role_id' => $role_id
+            ]);
+        }
+
+        $this->assertDatabaseHas('employees', [
+            'user_id' => $user->id
+        ]);
+
+        $this->assertDatabaseHas('managers', [
+            'nickname' => $data['nickname']
+        ]);
+
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        $this->assertDatabaseHas('managers_games', [
+            'manager_id' => $employee->manager()->first()->id,
+            'game_id' => $game->id
+        ]);
     }
 
     /** @test */
