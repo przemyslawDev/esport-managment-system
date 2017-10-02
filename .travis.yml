@@ -19,6 +19,7 @@ install:
    - composer install --no-interaction --ignore-platform-reqs --no-suggest
    - php artisan key:generate
    - php artisan migrate:refresh
+   - npm install -g bower
    - rm -rf node_modules
    - npm install
    - bower install
