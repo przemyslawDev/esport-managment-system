@@ -1,0 +1,20 @@
+{
+  "name": "esport",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "startbootstrap-sb-admin-2": "BlackrockDigital/startbootstrap-sb-admin-2#v3.3.7+1"
+  },
+  "resolutions": {
+    "font-awesome": "~4.6.3"
+  }
+}

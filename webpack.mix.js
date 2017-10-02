@@ -12,4 +12,13 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+    .sass('resources/assets/sass/app.scss', 'public/css').sourceMaps();
+
+mix.less('bower_components/startbootstrap-sb-admin-2/less/sb-admin-2.less', 'public/css')
+    .less('bower_components/bootstrap/less/bootstrap.less', 'public/css');
+
+mix.js('bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js', 'public/js')
+    .js('bower_components/bootstrap/dist/js/bootstrap.js', 'public/js')
+    .js('bower_components/metisMenu/dist/metisMenu.js', 'public/js');
+
+mix.copy('bower_components/metisMenu/dist/metisMenu.min.css', 'public/css/metisMenu.min.css');

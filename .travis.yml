@@ -20,8 +20,10 @@ install:
    - php artisan key:generate
    - php artisan migrate:refresh
    - rm -rf node_modules
-   - npm install 
+   - npm install
    - npm rebuild node-sass
+   - npm install -g bower
+   - bower install
 
 before_script:
    #- export DISPLAY=:0 

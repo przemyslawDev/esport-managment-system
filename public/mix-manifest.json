@@ -1,4 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/sb-admin-2.css": "/css/sb-admin-2.css",
+    "/css/bootstrap.css": "/css/bootstrap.css",
+    "/js/sb-admin-2.js": "/js/sb-admin-2.js",
+    "/js/metisMenu.js": "/js/metisMenu.js",
+    "/js/bootstrap.js": "/js/bootstrap.js",
+    "/css/metisMenu.min.css": "/css/metisMenu.min.css"
 }
