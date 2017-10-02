@@ -12,6 +12,6 @@
     "tests"
   ],
   "dependencies": {
-    "startbootstrap-sb-admin-2": "https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git#^3.3.7+1"
+    "startbootstrap-sb-admin-2": "https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git#master"
   }
 }
