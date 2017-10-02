@@ -2,10 +2,6 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="panel panel-default">
-            <div class="panel-body">
-               <team id="{{ $id }}" canedit="{{ Auth::user()->hasRole(['system_admin'])}}"></team>
-            </div>
-        </div>
+        <team id="{{ $id }}" canedit="{{ Auth::user()->hasRole(['system_admin'])}}"></team>
     </div>
 @endsection

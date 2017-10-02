@@ -4,7 +4,7 @@
         <div v-if="!loading" class="col-md-offset-3 col-md-6">
             <div v-if="success" class="alert alert-success" role="alert">{{ success }}</div>
             <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-show">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{ team.name }}</h3>
                 </div>

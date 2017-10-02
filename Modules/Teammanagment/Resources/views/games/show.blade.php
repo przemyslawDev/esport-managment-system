@@ -2,10 +2,6 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <game id="{{ $id }}"></game>
-            </div>
-        </div>
+        <game id="{{ $id }}"></game>
     </div>
 @endsection

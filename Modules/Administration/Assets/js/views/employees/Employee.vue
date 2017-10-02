@@ -3,7 +3,7 @@
         <spinner :condition="loading"></spinner>
         <div v-if="!loading" class="col-md-offset-3 col-md-6">
             <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-show">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{ this.fullname }}</h3>
                 </div>

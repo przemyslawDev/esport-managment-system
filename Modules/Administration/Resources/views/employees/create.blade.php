@@ -2,13 +2,11 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ _('Create Employee') }}</h3>
-            </div>
-            <div class="panel-body">
-                <employee-create></employee-create>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ _('Create employee') }}</h1>
             </div>
         </div>
+        <employee-create></employee-create>
     </div>
 @endsection

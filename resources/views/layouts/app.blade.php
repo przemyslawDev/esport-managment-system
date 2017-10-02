@@ -11,6 +11,9 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/metisMenu.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -20,15 +23,8 @@
     @if(Auth::check())
         @include('layouts.nav')
     <div id="app">
-        <div class="container-fluid">
-            <div class="row">
-                 <div class="col-sm-3 col-lg-2">
-                    @include('layouts.side-nav')
-                 </div>
-                 <div class="col-sm-9 col-lg-10">
-                    @yield('content')
-                </div>
-            </div>
+        <div id="page-wrapper" style="min-height: 906px;">
+            @yield('content')
         </div>
     </div>
     @else
@@ -39,5 +35,9 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <script src="{{ asset('js/metisMenu.js') }}"></script>
+    <script src="{{ asset('js/sb-admin-2.js') }}"></script>
+
 </body>
 </html>
